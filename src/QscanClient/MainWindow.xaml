@@ -1,0 +1,267 @@
+<Window x:Class="QscanClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:QscanClient"
+        xmlns:vm="clr-namespace:QscanClient.ViewModels"
+        mc:Ignorable="d"
+        Title="Qscan" Height="720" Width="1120"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        Foreground="White"
+        FontFamily="Segoe UI Variable Display, Segoe UI, sans-serif">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="1" 
+                      CornerRadius="8" 
+                      CaptionHeight="40" 
+                      ResizeBorderThickness="7"
+                      UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <!-- Main Background: Semi-transparent for Acrylic feel -->
+        <SolidColorBrush x:Key="Background_Main" Color="#CC121212"/> 
+        <!-- Note: We use the resource key from App.xaml but we need to reference the Color if we want to use it as a StaticResource directly or just mapping. 
+             Actually App.xaml defines SolidColorBrush with keys. 
+             Let's just use the App.xaml resources directly in the Grid and remove this local definition or aliases it.
+             But to minimize changes in the Grid usage, I'll redefine styling here. 
+             Wait, I don't can't access Color property of a Brush resource easily in XAML unless I defined Color resources. 
+             I will just Replace the Grid's background usage later or define a new Brush here. -->
+
+
+        <!-- Sidebar Button Style (Pill Shape) -->
+        <!-- Sidebar Button Style (Compact Fluent) -->
+        <Style x:Key="SidebarButton" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="Margin" Value="4,2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Grid Background="Transparent">
+                            <!-- Left Indicator -->
+                            <Border x:Name="Indicator" Background="{StaticResource Brush_Accent}" 
+                                    Width="3" Height="24" HorizontalAlignment="Left" 
+                                    CornerRadius="1.5" Visibility="Collapsed" Margin="0"/>
+                            
+                            <Border x:Name="HoverBd" Background="{TemplateBinding Background}" CornerRadius="4" Margin="6,0">
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <Viewbox Width="20" Height="20" Margin="0,0,0,4">
+                                        <Path x:Name="IconPath" Data="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
+                                              Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Stretch="Uniform"/>
+                                    </Viewbox>
+                                    <TextBlock x:Name="TextLabel" Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" 
+                                               FontSize="11" FontWeight="Normal" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" 
+                                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="HoverBd" Property="Background" Value="#1AFFFFFF"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Indicator" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="HoverBd" Property="Background" Value="#15FFFFFF"/> <!-- Subtle box highlight even when checked -->
+                                <Setter TargetName="IconPath" Property="Fill" Value="{StaticResource Brush_Accent}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter Property="Foreground" Value="{StaticResource Brush_Text_Secondary}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CaptionButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Width" Value="46"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#20FFFFFF"/> <!-- Brighter hover -->
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- New Scan Card Style -->
+        <Style x:Key="NewScanCardStyle" TargetType="Border">
+            <Setter Property="Width" Value="164"/>
+            <Setter Property="Height" Value="224"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Margin" Value="0,0,20,20"/>
+            <Setter Property="Background" Value="{StaticResource Brush_Accent_Gradient}"/>
+            <Setter Property="Effect" Value="{StaticResource StandardShadow}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="1.02" ScaleY="1.02" CenterX="82" CenterY="112"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Material Symbols Icons (Provided) -->
+        <Geometry x:Key="Icon_Home">M160-120v-480l320-240 320 240v480H560v-280H400v280H160Z</Geometry>
+        
+        <Geometry x:Key="Icon_Workflow">M296-270q-42 35-87.5 32T129-269q-34-28-46.5-73.5T99-436l75-124q-25-22-39.5-53T120-680q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47q-9 0-18-1t-17-3l-77 130q-11 18-7 35.5t17 28.5q13 11 31 12.5t35-12.5l420-361q42-35 88-31.5t80 31.5q34 28 46 73.5T861-524l-75 124q25 22 39.5 53t14.5 67q0 66-47 113t-113 47q-66 0-113-47t-47-113q0-66 47-113t113-47q9 0 17.5 1t16.5 3l78-130q11-18 7-35.5T782-630q-13-11-31-12.5T716-630L296-270Z</Geometry>
+        
+        <Geometry x:Key="Icon_Settings">m370-80-16-128q-13 5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm112-260q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Z</Geometry>
+        
+        <Geometry x:Key="Icon_Scanner">M4 18q-.825 0-1.412-.587Q2 16.825 2 16v-4q0-.825.587-1.412Q3.175 10 4 10h16q.825 0 1.412.587Q22 11.175 22 12v4q0 .825-.587 1.412Q20.825 18 20 18ZM5 14h14v-2H5v2Zm0-4 2.85-4h8.3L19 10H5Z</Geometry>
+    </Window.Resources>
+
+    <!-- Main Background: "Frame" with subtle gradient/texture feel -->
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#F2252525" Offset="0"/>
+                <GradientStop Color="#E61E1E1E" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="32"/>
+        </Grid.RowDefinitions>
+
+        <!-- TitleBar: Transparent (Shows Frame BG) -->
+        <Grid Grid.Row="0" Background="Transparent">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0">
+                <!-- App Icon -->
+                <Image Source="/Assets/Icon.png" Width="20" Height="20" Margin="0,0,10,0"/>
+                <!-- Logo Text if needed, or just Title -->
+                <TextBlock Text="Qscan" FontSize="13" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
+                <Button Style="{StaticResource CaptionButtonStyle}" Click="OnMinimizeClick">
+                    <Path Data="M0,0 H10" Stroke="White" StrokeThickness="2" Width="10" Height="2" VerticalAlignment="Center"/>
+                </Button>
+                <Button Style="{StaticResource CaptionButtonStyle}" Click="OnMaximizeRestoreClick">
+                    <Path Data="M0,0 H10 V10 H0 Z" Stroke="White" StrokeThickness="1.5" Width="10" Height="10" VerticalAlignment="Center"/>
+                </Button>
+                <Button Click="OnCloseClick">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#E81123"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Path Data="M0,0 L10,10 M0,10 L10,0" Stroke="White" StrokeThickness="1.5" Width="10" Height="10" VerticalAlignment="Center"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="72"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Sidebar: Transparent to show Frame Gradient -->
+            <Border Grid.Column="0" Background="Transparent" BorderThickness="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Margin="0,16,0,0">
+                        <RadioButton Style="{StaticResource SidebarButton}" GroupName="Sidebar" Tag="{StaticResource Icon_Home}" Content="Home" IsChecked="True"/>
+                        <RadioButton Style="{StaticResource SidebarButton}" GroupName="Sidebar" Tag="{StaticResource Icon_Workflow}" Content="Workflow"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Margin="0,0,0,16">
+                        <RadioButton Style="{StaticResource SidebarButton}" GroupName="Sidebar" Tag="{StaticResource Icon_Settings}" Content="Setting"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Content: Lighter, Transparent BG for Acrylic feel -->
+            <Border Grid.Column="1" Background="#B31C2126" CornerRadius="10,0,0,0" BorderBrush="#B31C2126" BorderThickness="1,1,0,0">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
+                </Border.Effect>
+                <Grid Background="Transparent">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="32,24,32,24">
+                        <TextBlock Text="Recent Scans" FontSize="28" FontWeight="SemiBold" Foreground="White"/>
+                    </Grid>
+
+                    <ScrollViewer Grid.Row="1" Margin="32,0,0,0" Padding="0,0,32,32" HorizontalScrollBarVisibility="Disabled">
+                        <WrapPanel Orientation="Horizontal">
+                            <!-- New Scan Removed as requested -->
+                            <local:DocCard Title="Documents 1.pdf" Date="12/10/2021" Size="175.5 MB"/>
+                            <local:DocCard Title="Documents 2.pdf" Date="12/10/2021" Size="139.7 KB"/>
+                            <local:DocCard Title="Documents 3.pdf" Date="12/10/2021" Size="12.9 MB"/>
+                        </WrapPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- StatusBar: Bottm alignment -->
+        <Border Grid.Row="2" Background="#0DFFFFFF" BorderBrush="#1AFFFFFF" BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0">
+                <!-- Pulsing indicator if searching -->
+                <Grid Margin="0,0,10,0" VerticalAlignment="Center">
+                    <Ellipse x:Name="StatusDot" Fill="{StaticResource Brush_Accent}" Width="8" Height="8">
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Q30Status}" Value="Searching">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard x:Name="PulseStoryboard">
+                                                <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0.2" Duration="0:0:1"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <StopStoryboard BeginStoryboardName="PulseStoryboard"/>
+                                        </DataTrigger.ExitActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
+                </Grid>
+
+                <Viewbox Width="16" Height="16" Margin="0,0,8,0">
+                    <Path Data="{StaticResource Icon_Scanner}" Fill="{StaticResource Brush_Text_Secondary}"/>
+                </Viewbox>
+                
+                <TextBlock FontSize="11" Foreground="{StaticResource Brush_Text_Secondary}" VerticalAlignment="Center">
+                    <Run Text="Q30 Scanner: "/>
+                    <Run Text="{Binding Q30StatusText, FallbackValue='Searching for connection...'}" FontWeight="SemiBold"/>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
