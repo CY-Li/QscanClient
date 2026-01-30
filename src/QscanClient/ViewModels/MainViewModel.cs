@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Windows;
 using System.Linq;
+using System.Collections.ObjectModel;
+using QscanClient.Models;
 
 namespace QscanClient.ViewModels;
 
@@ -20,33 +22,153 @@ public partial class MainViewModel : ObservableObject
     private Q30ConnectionStatus _q30Status = Q30ConnectionStatus.Searching;
 
     [ObservableProperty]
-    private string _q30StatusText = "Searching for Q30 Scanner...";
+    private string _q30StatusText = "Searching for connection...";
 
     [ObservableProperty]
-    private object _currentView;
+    private object? _currentView;
+
+    [ObservableProperty]
+    private bool _isScanning;
+
+
+    [ObservableProperty]
+    private int _currentScanningPage = 0;
+
+    [ObservableProperty]
+    private int _totalScanningPages = 10;
+
+    [ObservableProperty]
+    private ScanBatch? _selectedBatch;
+
+    public ObservableCollection<ScanBatch> Batches { get; } = new();
 
     [ObservableProperty]
     private bool _isDarkTheme = true;
+
+    [ObservableProperty]
+    private int _totalPagesToday;
+
+    [ObservableProperty]
+    private int _totalBatchesToday;
 
     partial void OnIsDarkThemeChanged(bool value)
     {
         ApplyTheme();
     }
 
-    private readonly Views.HomeView _homeView = new();
-    private readonly Views.SettingsView _settingsView = new();
+    private Views.HomeView? _homeView;
+    private Views.SettingsView? _settingsView;
+    private Views.DetailView? _detailView;
 
     public MainViewModel()
     {
         // Initial state
         UpdateStatus(Q30ConnectionStatus.Searching);
         
-        // Link views to this ViewModel for bindings
-        _homeView.DataContext = this;
-        _settingsView.DataContext = this;
+        // Mock initial data
+        LoadMockData();
 
-        // Initial view
-        CurrentView = _homeView;
+    }
+
+    public void Initialize()
+    {
+        try
+        {
+            // Link views to this ViewModel for bindings
+            _homeView = new Views.HomeView { DataContext = this };
+            _settingsView = new Views.SettingsView { DataContext = this };
+            _detailView = new Views.DetailView { DataContext = this };
+
+            // Initial view
+            CurrentView = _homeView;
+            
+            // Start with disconnected status as requested
+            UpdateStatus(Q30ConnectionStatus.Disconnected);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Qscan Startup Error (XAML): {ex.Message}\n\nStack: {ex.StackTrace}", "Startup Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+
+    private void LoadMockData()
+    {
+        var now = DateTime.Now;
+        Batches.Add(new ScanBatch { Title = now.AddDays(-1).ToString("yyyyMMdd_HHmmss"), Timestamp = now.AddDays(-1), ImageCount = 12 });
+        Batches.Add(new ScanBatch { Title = now.AddDays(-2).ToString("yyyyMMdd_HHmmss"), Timestamp = now.AddDays(-2), ImageCount = 5 });
+        Batches.Add(new ScanBatch { Title = now.AddDays(-3).ToString("yyyyMMdd_HHmmss"), Timestamp = now.AddDays(-3), ImageCount = 8 });
+    }
+
+    [RelayCommand]
+    public async System.Threading.Tasks.Task SimulateScan()
+    {
+        if (IsScanning) 
+        {
+            IsScanning = false;
+            UpdateStatus(Q30ConnectionStatus.Connected);
+            return;
+        }
+
+        IsScanning = true;
+        UpdateStatus(Q30ConnectionStatus.Connected);
+        CurrentScanningPage = 0;
+
+        // Simulate passive reception of pages
+        // In a real scenario, this would loop until a 'Batch Complete' packet is received
+        int randomTotal = new Random().Next(5, 20); 
+
+        for (int i = 1; i <= randomTotal; i++)
+        {
+            if (!IsScanning) break;
+            
+            CurrentScanningPage = i;
+            CurrentScanningPage = i;
+            
+            // Simulate page transfer time
+            await System.Threading.Tasks.Task.Delay(500); 
+        }
+
+        if (IsScanning)
+        {
+            // Auto addition of new batch on completion
+            var now = DateTime.Now;
+            var newBatch = new ScanBatch 
+            { 
+                Title = now.ToString("yyyyMMdd_HHmmss"), 
+                Timestamp = now, 
+                ImageCount = CurrentScanningPage,
+                IsNew = true // Trigger highlight
+            };
+            
+            Batches.Insert(0, newBatch); // Add to top of list
+            SelectedBatch = newBatch; // Auto-select? Maybe just highlight.
+            IsScanning = false;
+            IsScanning = false;
+            
+            // Auto-disconnect after scan as requested
+            UpdateStatus(Q30ConnectionStatus.Disconnected);
+
+            // Auto-remove highlight after 5 seconds
+            _ = System.Threading.Tasks.Task.Delay(5000).ContinueWith(_ => 
+            {
+                Application.Current.Dispatcher.Invoke(() => 
+                {
+                    newBatch.IsNew = false;
+                });
+            });
+        }
+        else
+        {
+            UpdateStatus(Q30ConnectionStatus.Searching);
+        }
+    }
+
+    [RelayCommand]
+    public void SelectBatch(ScanBatch batch)
+    {
+        SelectedBatch = batch;
+        Navigate("Detail");
     }
 
     [RelayCommand]
@@ -56,7 +178,8 @@ public partial class MainViewModel : ObservableObject
         {
             "Home" => _homeView,
             "Settings" => _settingsView,
-            _ => _homeView
+            "Detail" => _detailView,
+            _ => (object?)_homeView
         };
     }
 
@@ -106,10 +229,10 @@ public partial class MainViewModel : ObservableObject
         Q30Status = status;
         Q30StatusText = status switch
         {
-            Q30ConnectionStatus.Disconnected => "Q30 Scanner: Disconnected",
-            Q30ConnectionStatus.Searching => "Searching for Q30 connection...",
-            Q30ConnectionStatus.Connected => "Q30 Scanner: Connected",
-            Q30ConnectionStatus.WaitingForUpload => "Q30 Scanner: Connected - Waiting for scan...",
+            Q30ConnectionStatus.Disconnected => "Searching for connection...",
+            Q30ConnectionStatus.Searching => "Searching for connection...",
+            Q30ConnectionStatus.Connected => "Plustek Q30 Connected",
+            Q30ConnectionStatus.WaitingForUpload => "Plustek Q30 Connected",
             _ => "Unknown Status"
         };
     }

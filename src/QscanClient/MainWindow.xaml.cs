@@ -7,7 +7,12 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        this.DataContext = new ViewModels.MainViewModel();
+        var vm = new ViewModels.MainViewModel();
+        this.DataContext = vm;
+        
+        this.Loaded += (s, e) => {
+            vm.Initialize();
+        };
     }
 
     private void OnMinimizeClick(object sender, RoutedEventArgs e)

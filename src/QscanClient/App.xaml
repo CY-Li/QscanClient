@@ -7,13 +7,118 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <!-- Default Theme -->
-                <ResourceDictionary Source="Themes/DarkTheme.xaml"/>
+                <ResourceDictionary Source="/Themes/DarkTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- Converters -->
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+            <!-- Sidebar Button Base template structure (Common for both) -->
+            <Style x:Key="SidebarButtonBase" TargetType="Control">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Secondary}"/>
+                <Setter Property="Height" Value="60"/>
+                <Setter Property="Margin" Value="4,2"/>
+            </Style>
+
+            <!-- Global Style: Sidebar RadioButton (Used in Main Navigation) -->
+            <Style x:Key="SidebarRadioButtonStyle" TargetType="RadioButton" BasedOn="{StaticResource SidebarButtonBase}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="RadioButton">
+                            <Grid Background="Transparent">
+                                <Border x:Name="Indicator" Background="{DynamicResource Brush_Accent}" 
+                                        Width="3" Height="24" HorizontalAlignment="Left" 
+                                        CornerRadius="1.5" Visibility="Collapsed" Margin="0"/>
+                                <Border x:Name="HoverBd" Background="{TemplateBinding Background}" CornerRadius="4" Margin="6,0">
+                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <Viewbox Width="20" Height="20" Margin="0,0,0,4">
+                                            <Path x:Name="IconPath" Data="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
+                                                  Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Stretch="Uniform"/>
+                                        </Viewbox>
+                                        <TextBlock x:Name="TextLabel" Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" 
+                                                   FontSize="11" FontWeight="Normal" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" 
+                                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="HoverBd" Property="Background" Value="{DynamicResource Brush_Sidebar_Hover}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Primary}"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="Indicator" Property="Visibility" Value="Visible"/>
+                                    <Setter TargetName="HoverBd" Property="Background" Value="{DynamicResource Brush_Sidebar_Selected}"/> 
+                                    <Setter TargetName="IconPath" Property="Fill" Value="{DynamicResource Brush_Accent_Gradient}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Primary}"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Secondary}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Global Style: Sidebar Button (Used for Actions) -->
+            <Style x:Key="SidebarButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Height" Value="50"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="HoverBd" Background="{TemplateBinding Background}" CornerRadius="4">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0">
+                                    <Viewbox Width="16" Height="16" Margin="0,0,12,0">
+                                        <Path x:Name="IconPath" Data="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
+                                              Fill="{TemplateBinding Foreground}" Stretch="Uniform"/>
+                                    </Viewbox>
+                                    <ContentPresenter VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="HoverBd" Property="Background" Value="{DynamicResource Brush_Sidebar_Hover}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Primary}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Global Style: Sidebar Action Button -->
+            <Style x:Key="SidebarActionStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Height" Value="50"/>
+                <Setter Property="Margin" Value="10,4"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="HoverBd" Background="{TemplateBinding Background}" CornerRadius="6">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="HoverBd" Property="Background" Value="{DynamicResource Brush_Sidebar_Hover}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Global Geometries (Icons) -->
+            <Geometry x:Key="Icon_Home">M160-120v-480l320-240 320 240v480H560v-280H400v280H160Z</Geometry>
+            <Geometry x:Key="Icon_Workflow">M296-270q-42 35-87.5 32T129-269q-34-28-46.5-73.5T99-436l75-124q-25-22-39.5-53T120-680q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47q-9 0-18-1t-17-3l-77 130q-11 18-7 35.5t17 28.5q13 11 31 12.5t35-12.5l420-361q42-35 88-31.5t80 31.5q34 28 46 73.5T861-524l-75 124q25 22 39.5 53t14.5 67q0 66-47 113t-113 47q-66 0-113-47t-47-113q0-66 47-113t113-47q9 0 17.5 1t16.5 3l78-130q11-18 7-35.5T782-630q-13-11-31-12.5T716-630L296-270Z</Geometry>
+            <Geometry x:Key="Icon_Settings">m370-80-16-128q-13 5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm112-260q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Z</Geometry>
 
             <!-- Custom ScrollBar Style (Dynamic) -->
             <Style TargetType="{x:Type ScrollBar}">
                 <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
-                <Setter Property="Foreground" Value="{StaticResource Brush_Text_Secondary}" />
+                <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Secondary}" />
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="Width" Value="10" />
                 <Setter Property="Template">
@@ -25,13 +130,13 @@
                                         <Thumb x:Name="Thumb">
                                             <Thumb.Template>
                                                 <ControlTemplate TargetType="{x:Type Thumb}">
-                                                    <Border x:Name="thumbBorder" Background="{StaticResource Brush_Sidebar_Selected}" CornerRadius="5" Margin="2"/>
+                                                    <Border x:Name="thumbBorder" Background="{DynamicResource Brush_Sidebar_Selected}" CornerRadius="5" Margin="2"/>
                                                     <ControlTemplate.Triggers>
                                                         <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter TargetName="thumbBorder" Property="Background" Value="{StaticResource Brush_Sidebar_Hover}" />
+                                                            <Setter TargetName="thumbBorder" Property="Background" Value="{DynamicResource Brush_Sidebar_Hover}" />
                                                         </Trigger>
                                                         <Trigger Property="IsDragging" Value="True">
-                                                            <Setter TargetName="thumbBorder" Property="Background" Value="{StaticResource Brush_Accent}" />
+                                                            <Setter TargetName="thumbBorder" Property="Background" Value="{DynamicResource Brush_Accent}" />
                                                         </Trigger>
                                                     </ControlTemplate.Triggers>
                                                 </ControlTemplate>

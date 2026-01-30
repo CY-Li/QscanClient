@@ -15,11 +15,11 @@
     <SolidColorBrush x:Key="Brush_Accent_Glow" Color="#FFB800"/>
     <SolidColorBrush x:Key="Brush_Text_Primary" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="Brush_Text_Secondary" Color="#B5A89D"/>
-    <SolidColorBrush x:Key="Brush_Border_Subtle" Color="#1FFFFFFF"/>
+    <SolidColorBrush x:Key="Brush_Border_Subtle" Color="#0AFFFFFF"/> <!-- Even more subtle -->
 
     <!-- Depth & Shadows -->
-    <DropShadowEffect x:Key="StandardShadow" BlurRadius="20" Opacity="0.4" ShadowDepth="4" Color="Black"/>
-    <DropShadowEffect x:Key="WarmGlow" BlurRadius="25" Opacity="0.6" ShadowDepth="0" Color="#261200"/>
+    <DropShadowEffect x:Key="StandardShadow" BlurRadius="40" Opacity="0.25" ShadowDepth="4" Color="Black"/>
+    <DropShadowEffect x:Key="WarmGlow" BlurRadius="40" Opacity="0.4" ShadowDepth="0" Color="#261200"/>
     
     <!-- Sidebar Button Internal Triggers -->
     <SolidColorBrush x:Key="Brush_Sidebar_Hover" Color="#1AFFFFFF"/>

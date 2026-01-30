@@ -15,7 +15,7 @@
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="1" 
                       CornerRadius="8" 
-                      CaptionHeight="40" 
+                      CaptionHeight="48" 
                       ResizeBorderThickness="7"
                       UseAeroCaptionButtons="False"/>
     </WindowChrome.WindowChrome>
@@ -31,57 +31,12 @@
              I will just Replace the Grid's background usage later or define a new Brush here. -->
 
 
-        <!-- Sidebar Button Style (Pill Shape) -->
-        <!-- Sidebar Button Style (Compact Fluent) -->
-        <Style x:Key="SidebarButton" TargetType="RadioButton">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Height" Value="60"/>
-            <Setter Property="Margin" Value="4,2"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RadioButton">
-                        <Grid Background="Transparent">
-                            <!-- Left Indicator -->
-                            <Border x:Name="Indicator" Background="{StaticResource Brush_Accent}" 
-                                    Width="3" Height="24" HorizontalAlignment="Left" 
-                                    CornerRadius="1.5" Visibility="Collapsed" Margin="0"/>
-                            
-                            <Border x:Name="HoverBd" Background="{TemplateBinding Background}" CornerRadius="4" Margin="6,0">
-                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <Viewbox Width="20" Height="20" Margin="0,0,0,4">
-                                        <Path x:Name="IconPath" Data="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
-                                              Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Stretch="Uniform"/>
-                                    </Viewbox>
-                                    <TextBlock x:Name="TextLabel" Text="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" 
-                                               FontSize="11" FontWeight="Normal" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" 
-                                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                </StackPanel>
-                            </Border>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="HoverBd" Property="Background" Value="{DynamicResource Brush_Sidebar_Hover}"/>
-                                <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Primary}"/>
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Indicator" Property="Visibility" Value="Visible"/>
-                                <Setter TargetName="HoverBd" Property="Background" Value="{DynamicResource Brush_Sidebar_Selected}"/> 
-                                <Setter TargetName="IconPath" Property="Fill" Value="{DynamicResource Brush_Accent_Gradient}"/>
-                                <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Primary}"/>
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="False">
-                                <Setter Property="Foreground" Value="{StaticResource Brush_Text_Secondary}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <!-- Resources moved to App.xaml for global availability and crash prevention -->
 
         <Style x:Key="CaptionButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Width" Value="46"/>
-            <Setter Property="Height" Value="32"/>
+            <Setter Property="Height" Value="48"/>
             <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -105,8 +60,8 @@
             <Setter Property="Height" Value="224"/>
             <Setter Property="CornerRadius" Value="12"/>
             <Setter Property="Margin" Value="0,0,20,20"/>
-            <Setter Property="Background" Value="{StaticResource Brush_Accent_Gradient}"/>
-            <Setter Property="Effect" Value="{StaticResource StandardShadow}"/>
+            <Setter Property="Background" Value="{DynamicResource Brush_Accent_Gradient}"/>
+            <Setter Property="Effect" Value="{DynamicResource StandardShadow}"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="RenderTransform">
@@ -118,12 +73,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Material Symbols Icons (Provided) -->
-        <Geometry x:Key="Icon_Home">M160-120v-480l320-240 320 240v480H560v-280H400v280H160Z</Geometry>
-        
-        <Geometry x:Key="Icon_Workflow">M296-270q-42 35-87.5 32T129-269q-34-28-46.5-73.5T99-436l75-124q-25-22-39.5-53T120-680q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47q-9 0-18-1t-17-3l-77 130q-11 18-7 35.5t17 28.5q13 11 31 12.5t35-12.5l420-361q42-35 88-31.5t80 31.5q34 28 46 73.5T861-524l-75 124q25 22 39.5 53t14.5 67q0 66-47 113t-113 47q-66 0-113-47t-47-113q0-66 47-113t113-47q9 0 17.5 1t16.5 3l78-130q11-18 7-35.5T782-630q-13-11-31-12.5T716-630L296-270Z</Geometry>
-        
-        <Geometry x:Key="Icon_Settings">m370-80-16-128q-13 5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm112-260q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Z</Geometry>
+        <!-- Icon Geometries moved to App.xaml -->
         
         <!-- Scanner Icons (Online/Offline) -->
         <DrawingImage x:Key="ScannerOnline">
@@ -151,8 +101,17 @@
 
     <!-- Main Background: "Frame" with dynamic base color -->
     <Grid Background="{DynamicResource Brush_Background_Base}">
+        <Grid.Style>
+            <Style TargetType="Grid">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Maximized">
+                        <Setter Property="Margin" Value="7"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
         <Grid.RowDefinitions>
-            <RowDefinition Height="32"/>
+            <RowDefinition Height="48"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="32"/>
         </Grid.RowDefinitions>
@@ -167,6 +126,25 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
+                <!-- Simulation Trigger (Subtle TitleBar Action) -->
+                <Button Command="{Binding SimulateScanCommand}" ToolTip="Toggle Scanning Simulation"
+                        Background="Transparent" BorderThickness="0" Margin="0,0,10,0"
+                        VerticalAlignment="Center" Padding="8,4" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="bd" Background="Transparent" CornerRadius="4" BorderBrush="{DynamicResource Brush_Border_Subtle}" BorderThickness="1">
+                                <TextBlock Text="Simulate" FontSize="10" Foreground="{DynamicResource Brush_Text_Secondary}" Margin="4,2"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="bd" Property="Background" Value="{DynamicResource Brush_Sidebar_Hover}"/>
+                                    <Setter Property="Opacity" Value="0.8"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
                 <Button Style="{StaticResource CaptionButtonStyle}" Click="OnMinimizeClick">
                     <Path Data="M0,0 H10" Stroke="{DynamicResource Brush_Text_Primary}" StrokeThickness="2" Width="10" Height="2" VerticalAlignment="Center"/>
                 </Button>
@@ -204,47 +182,55 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Grid.Row="0" Margin="0,16,0,0">
-                        <RadioButton Style="{StaticResource SidebarButton}" GroupName="Sidebar" Tag="{StaticResource Icon_Home}" Content="Home" IsChecked="True"
+                        <RadioButton Style="{StaticResource SidebarRadioButtonStyle}" GroupName="Sidebar" Tag="{StaticResource Icon_Home}" Content="Home" IsChecked="True"
                                      Command="{Binding NavigateCommand}" CommandParameter="Home"/>
-                        <RadioButton Style="{StaticResource SidebarButton}" GroupName="Sidebar" Tag="{StaticResource Icon_Workflow}" Content="Workflow"/>
+                        <RadioButton Style="{StaticResource SidebarRadioButtonStyle}" GroupName="Sidebar" Tag="{StaticResource Icon_Workflow}" Content="Workflow"/>
                     </StackPanel>
 
                     <StackPanel Grid.Row="1" Margin="0,0,0,16">
-                        <RadioButton Style="{StaticResource SidebarButton}" GroupName="Sidebar" Tag="{StaticResource Icon_Settings}" Content="Setting"
+                        <RadioButton Style="{StaticResource SidebarRadioButtonStyle}" GroupName="Sidebar" Tag="{StaticResource Icon_Settings}" Content="Setting"
                                      Command="{Binding NavigateCommand}" CommandParameter="Settings"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- Content: Lighter, Transparent BG for Acrylic feel -->
-            <Border Grid.Column="1" Background="{DynamicResource Brush_Background_Surface}" Opacity="0.8" CornerRadius="10,0,0,0" BorderBrush="{DynamicResource Brush_Border_Subtle}" BorderThickness="1,1,0,0">
+            <Border Grid.Column="1" Background="{DynamicResource Brush_Background_Surface}" Opacity="0.8" CornerRadius="10,0,0,0" BorderThickness="0" ClipToBounds="False">
                 <Border.Effect>
-                    <DropShadowEffect Color="{Binding Source={StaticResource Brush_Background_Base}, Path=Color}" BlurRadius="30" ShadowDepth="0" Opacity="0.5"/>
+                    <DropShadowEffect Color="Black" BlurRadius="30" ShadowDepth="0" Opacity="0.5"/>
                 </Border.Effect>
                 <ContentControl Content="{Binding CurrentView}"/>
             </Border>
         </Grid>
 
         <!-- StatusBar: Bottm alignment -->
-        <Border Grid.Row="2" Background="{DynamicResource Brush_Background_Surface}" Opacity="0.9" BorderBrush="{DynamicResource Brush_Border_Subtle}" BorderThickness="0,1,0,0">
+        <Border Grid.Row="2" Background="{DynamicResource Brush_Background_Surface}" Opacity="0.9" BorderThickness="0">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0">
                 <!-- Pulsing indicator if searching -->
                 <Grid Margin="0,0,10,0" VerticalAlignment="Center">
-                    <Ellipse x:Name="StatusDot" Fill="{DynamicResource Brush_Accent}" Width="8" Height="8">
+                    <Ellipse x:Name="StatusDot" Width="8" Height="8">
                         <Ellipse.Style>
                             <Style TargetType="Ellipse">
+                                <Setter Property="Fill" Value="{DynamicResource Brush_Accent}"/> <!-- Default (Searching - Orange) -->
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Q30Status}" Value="Searching">
-                                        <DataTrigger.EnterActions>
-                                            <BeginStoryboard x:Name="PulseStoryboard">
-                                                <Storyboard RepeatBehavior="Forever" AutoReverse="True">
-                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0.2" Duration="0:0:1"/>
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </DataTrigger.EnterActions>
-                                        <DataTrigger.ExitActions>
-                                            <StopStoryboard BeginStoryboardName="PulseStoryboard"/>
-                                        </DataTrigger.ExitActions>
+                                    <!-- Always Pulse -->
+                                    <EventTrigger RoutedEvent="Loaded">
+                                        <BeginStoryboard>
+                                            <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0.2" Duration="0:0:1.2"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                    
+                                    <!-- Explicit Colors -->
+                                    <DataTrigger Binding="{Binding Q30Status}" Value="{x:Static vm:Q30ConnectionStatus.Disconnected}">
+                                        <Setter Property="Fill" Value="#E81123"/> <!-- Red -->
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Q30Status}" Value="{x:Static vm:Q30ConnectionStatus.Connected}">
+                                        <Setter Property="Fill" Value="#4CAF50"/> <!-- Green -->
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Q30Status}" Value="{x:Static vm:Q30ConnectionStatus.WaitingForUpload}">
+                                        <Setter Property="Fill" Value="#4CAF50"/> <!-- Green -->
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -269,7 +255,6 @@
                 </Image>
                 
                 <TextBlock FontSize="11" Foreground="{DynamicResource Brush_Text_Secondary}" VerticalAlignment="Center">
-                    <Run Text="Q30 Scanner: "/>
                     <Run Text="{Binding Q30StatusText, FallbackValue='Searching for connection...'}" FontWeight="SemiBold"/>
                 </TextBlock>
             </StackPanel>

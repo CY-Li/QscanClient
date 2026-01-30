@@ -4,19 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
+             x:Name="RootUnit"
              UseLayoutRounding="True"
              Margin="0,0,20,20">
     <UserControl.Resources>
         <Style x:Key="DocCardBorderStyle" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource Brush_Elevation_Card}"/>
             <Setter Property="CornerRadius" Value="12"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource Brush_Border_Subtle}"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Effect" Value="{DynamicResource StandardShadow}"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="{DynamicResource Brush_Card_Hover}"/>
-                    <Setter Property="BorderBrush" Value="{DynamicResource Brush_Accent}"/>
                     <Setter Property="Effect" Value="{DynamicResource WarmGlow}"/>
                     <Setter Property="RenderTransform">
                         <Setter.Value>
@@ -24,12 +24,32 @@
                         </Setter.Value>
                     </Setter>
                 </Trigger>
+                <DataTrigger Binding="{Binding IsNew}" Value="True">
+                    <Setter Property="BorderBrush" Value="{DynamicResource Brush_Accent}"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                    <Setter Property="Effect" Value="{DynamicResource WarmGlow}"/>
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0.7" Duration="0:0:0.8"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                </DataTrigger>
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
 
     <Grid ClipToBounds="False" Background="Transparent">
-        <Border Margin="6" Width="164" Height="224" Style="{StaticResource DocCardBorderStyle}">
+        <Button Command="{Binding Command, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                CommandParameter="{Binding CommandParameter, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Background="Transparent" BorderThickness="0" Padding="0" Cursor="Hand">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter/>
+                </ControlTemplate>
+            </Button.Template>
+            <Border Margin="6" MinWidth="164" Height="224" Style="{StaticResource DocCardBorderStyle}" HorizontalAlignment="Stretch">
             <Grid Margin="12">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -41,27 +61,35 @@
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="10" Opacity="0.1" ShadowDepth="2"/>
                     </Border.Effect>
-                    <Grid Margin="12,16">
-                        <StackPanel>
-                            <!-- Header lines -->
-                            <Rectangle Fill="{StaticResource Brush_Accent}" Height="2" Width="20" HorizontalAlignment="Left" Margin="0,0,0,8" Opacity="0.8"/>
-                            <Rectangle Fill="#E0E0E0" Height="2" Margin="0,0,0,4"/>
-                            <Rectangle Fill="#F0F0F0" Height="2" Margin="0,0,10,4"/>
-                            
-                            <!-- Body lines -->
-                            <StackPanel Margin="0,12,0,0">
-                                <Rectangle Fill="#F5F5F5" Height="1.5" Margin="0,0,0,3"/>
-                                <Rectangle Fill="#F5F5F5" Height="1.5" Margin="0,0,0,3"/>
-                                <Rectangle Fill="#F5F5F5" Height="1.5" Margin="0,0,4,3"/>
-                                <Rectangle Fill="#F5F5F5" Height="1.5" Margin="0,0,0,3"/>
-                                <Rectangle Fill="#F5F5F5" Height="1.5" Margin="0,0,8,3"/>
-                                <Rectangle Fill="#F5F5F5" Height="1.5" Margin="0,0,0,3"/>
-                                <Rectangle Fill="#F5F5F5" Height="1.5" Margin="0,0,2,3"/>
+                    <Grid>
+                        <Grid Margin="12,16">
+                            <StackPanel>
+                                <!-- Header lines -->
+                                <Rectangle Fill="{DynamicResource Brush_Accent}" Height="2" Width="20" HorizontalAlignment="Left" Margin="0,0,0,8" Opacity="0.8"/>
+                                <Rectangle Fill="#E0E0E0" Height="2" Margin="0,0,0,4"/>
+                                <Rectangle Fill="#F0F0F0" Height="2" Margin="0,0,10,4"/>
+                                
+                                <!-- Body lines -->
+                                <StackPanel Margin="0,12,0,0">
+                                    <Rectangle Fill="#F5F5F5" Height="1.5" Margin="0,0,0,3"/>
+                                    <Rectangle Fill="#F5F5F5" Height="1.5" Margin="0,0,0,3"/>
+                                    <Rectangle Fill="#F5F5F5" Height="1.5" Margin="0,0,4,3"/>
+                                    <Rectangle Fill="#F5F5F5" Height="1.5" Margin="0,0,0,3"/>
+                                    <Rectangle Fill="#F5F5F5" Height="1.5" Margin="0,0,8,3"/>
+                                    <Rectangle Fill="#F5F5F5" Height="1.5" Margin="0,0,0,3"/>
+                                    <Rectangle Fill="#F5F5F5" Height="1.5" Margin="0,0,2,3"/>
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
+                            
+                            <!-- Mini "Stamp" or Logo indicator -->
+                             <Ellipse Fill="{DynamicResource Brush_Accent}" Width="8" Height="8" VerticalAlignment="Bottom" HorizontalAlignment="Right" Opacity="0.1"/>
+                        </Grid>
                         
-                        <!-- Mini "Stamp" or Logo indicator -->
-                         <Ellipse Fill="{StaticResource Brush_Accent}" Width="8" Height="8" VerticalAlignment="Bottom" HorizontalAlignment="Right" Opacity="0.1"/>
+                        <!-- NEW Badge Overlay -->
+                        <Border Background="{DynamicResource Brush_Accent}" CornerRadius="4" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,8,8,0" Padding="6,2"
+                                Visibility="{Binding IsNew, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                            <TextBlock Text="NEW" FontSize="9" FontWeight="Bold" Foreground="White"/>
+                        </Border>
                     </Grid>
                 </Border>
 
@@ -72,11 +100,12 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Date, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                    Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="11" Margin="0,0,8,0"/>
-                        <TextBlock Text="{Binding Size, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                        <TextBlock Text="{Binding Subtitle, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                                    Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="11"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
-        </Border>
+            </Border>
+        </Button>
     </Grid>
 </UserControl>
