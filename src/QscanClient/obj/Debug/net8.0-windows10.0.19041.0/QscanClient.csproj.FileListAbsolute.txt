@@ -31,3 +31,4 @@ C:\Users\Jimmy\QscanClient\src\QscanClient\obj\Debug\net8.0-windows10.0.19041.0\
 C:\Users\Jimmy\QscanClient\src\QscanClient\obj\Debug\net8.0-windows10.0.19041.0\QscanClient.pdb
 C:\Users\Jimmy\QscanClient\src\QscanClient\obj\Debug\net8.0-windows10.0.19041.0\QscanClient.genruntimeconfig.cache
 C:\Users\Jimmy\QscanClient\src\QscanClient\obj\Debug\net8.0-windows10.0.19041.0\ref\QscanClient.dll
+C:\Users\Jimmy\QscanClient\src\QscanClient\obj\Debug\net8.0-windows10.0.19041.0\QscanClient.sourcelink.json
