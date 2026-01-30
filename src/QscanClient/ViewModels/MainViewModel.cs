@@ -1,4 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System;
+using System.Windows;
+using System.Linq;
 
 namespace QscanClient.ViewModels;
 
@@ -18,13 +22,66 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string _q30StatusText = "Searching for Q30 Scanner...";
 
+    [ObservableProperty]
+    private object _currentView;
+
+    [ObservableProperty]
+    private bool _isDarkTheme = true;
+
+    partial void OnIsDarkThemeChanged(bool value)
+    {
+        ApplyTheme();
+    }
+
+    private readonly Views.HomeView _homeView = new();
+    private readonly Views.SettingsView _settingsView = new();
+
     public MainViewModel()
     {
-        // Initial state: start searching for Q30
+        // Initial state
         UpdateStatus(Q30ConnectionStatus.Searching);
         
-        // Placeholder for future implementation:
-        // StartMdnsDiscovery(); // This would broadcast the PC name for Q30 to find
+        // Link views to this ViewModel for bindings
+        _homeView.DataContext = this;
+        _settingsView.DataContext = this;
+
+        // Initial view
+        CurrentView = _homeView;
+    }
+
+    [RelayCommand]
+    public void Navigate(string destination)
+    {
+        CurrentView = destination switch
+        {
+            "Home" => _homeView,
+            "Settings" => _settingsView,
+            _ => _homeView
+        };
+    }
+
+    [RelayCommand]
+    public void ToggleTheme()
+    {
+        IsDarkTheme = !IsDarkTheme;
+        ApplyTheme();
+    }
+
+    private void ApplyTheme()
+    {
+        var dict = Application.Current.Resources.MergedDictionaries;
+        var themeDict = dict.FirstOrDefault(d => d.Source != null && (d.Source.OriginalString.Contains("Theme.xaml")));
+        
+        if (themeDict != null)
+        {
+            dict.Remove(themeDict);
+        }
+
+        var newSource = IsDarkTheme 
+            ? new Uri("Themes/DarkTheme.xaml", UriKind.Relative) 
+            : new Uri("Themes/LightTheme.xaml", UriKind.Relative);
+            
+        dict.Add(new ResourceDictionary { Source = newSource });
     }
 
     /// <summary>

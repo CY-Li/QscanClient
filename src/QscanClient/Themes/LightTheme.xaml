@@ -1,0 +1,28 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Sunrise Pearl Color Palette -->
+    <SolidColorBrush x:Key="Brush_Background_Base" Color="#FDFCFB"/>
+    <SolidColorBrush x:Key="Brush_Background_Surface" Color="#F0EAE4"/>
+    <SolidColorBrush x:Key="Brush_Elevation_Card" Color="#FFFFFF"/>
+    
+    <LinearGradientBrush x:Key="Brush_Accent_Gradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#FF6B20" Offset="0"/>
+        <GradientStop Color="#FFA000" Offset="1"/>
+    </LinearGradientBrush>
+
+    <!-- Dynamic Theme Brushes -->
+    <SolidColorBrush x:Key="Brush_Accent" Color="#FF6B20"/>
+    <SolidColorBrush x:Key="Brush_Accent_Glow" Color="#FFD700"/>
+    <SolidColorBrush x:Key="Brush_Text_Primary" Color="#1A1A1A"/>
+    <SolidColorBrush x:Key="Brush_Text_Secondary" Color="#666666"/>
+    <SolidColorBrush x:Key="Brush_Border_Subtle" Color="#20000000"/>
+
+    <!-- Depth & Shadows -->
+    <DropShadowEffect x:Key="StandardShadow" BlurRadius="25" Opacity="0.12" ShadowDepth="6" Color="#000000"/>
+    <DropShadowEffect x:Key="WarmGlow" BlurRadius="30" Opacity="0.4" ShadowDepth="0" Color="#FFD700"/>
+
+    <!-- Sidebar Button Internal Triggers -->
+    <SolidColorBrush x:Key="Brush_Sidebar_Hover" Color="#E8E2DB"/> <!-- Subtle darker than Surface -->
+    <SolidColorBrush x:Key="Brush_Sidebar_Selected" Color="#FFEDD5"/> <!-- Very light orange tint -->
+    <SolidColorBrush x:Key="Brush_Card_Hover" Color="#FFF9F2"/> <!-- Extremely light orange lift -->
+</ResourceDictionary>

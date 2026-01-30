@@ -60,14 +60,14 @@
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="HoverBd" Property="Background" Value="#1AFFFFFF"/>
-                                <Setter Property="Foreground" Value="White"/>
+                                <Setter TargetName="HoverBd" Property="Background" Value="{DynamicResource Brush_Sidebar_Hover}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Primary}"/>
                             </Trigger>
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="Indicator" Property="Visibility" Value="Visible"/>
-                                <Setter TargetName="HoverBd" Property="Background" Value="#15FFFFFF"/> <!-- Subtle box highlight even when checked -->
-                                <Setter TargetName="IconPath" Property="Fill" Value="{StaticResource Brush_Accent}"/>
-                                <Setter Property="Foreground" Value="White"/>
+                                <Setter TargetName="HoverBd" Property="Background" Value="{DynamicResource Brush_Sidebar_Selected}"/> 
+                                <Setter TargetName="IconPath" Property="Fill" Value="{DynamicResource Brush_Accent_Gradient}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Primary}"/>
                             </Trigger>
                             <Trigger Property="IsChecked" Value="False">
                                 <Setter Property="Foreground" Value="{StaticResource Brush_Text_Secondary}"/>
@@ -94,7 +94,7 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#20FFFFFF"/> <!-- Brighter hover -->
+                    <Setter Property="Background" Value="{DynamicResource Brush_Sidebar_Hover}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -128,7 +128,7 @@
         <!-- Scanner Icons (Online/Offline) -->
         <DrawingImage x:Key="ScannerOnline">
             <DrawingImage.Drawing>
-                <GeometryDrawing Brush="{StaticResource Brush_Text_Secondary}" 
+                <GeometryDrawing Brush="{DynamicResource Brush_Text_Secondary}" 
                                  Geometry="M58.6667 40.0005L14.75 24.0838C13.9167 23.806 13.32 23.2505 12.96 22.4172C12.5978 21.5838 12.5556 20.7227 12.8333 19.8338C13.1111 18.9449 13.68 18.3194 14.54 17.9572C15.4022 17.5972 16.2778 17.556 17.1667 17.8338L66 35.6672C67.1111 36.1116 68.0556 36.8894 68.8333 38.0005C69.6111 39.1116 70 40.3338 70 41.6672V60.0005C70 61.8338 69.3478 63.4038 68.0433 64.7105C66.7367 66.0149 65.1667 66.6672 63.3333 66.6672H16.6667C14.8333 66.6672 13.2633 66.0149 11.9567 64.7105C10.6522 63.4038 10 61.8338 10 60.0005V46.6672C10 44.8338 10.6522 43.2638 11.9567 41.9572C13.2633 40.6527 14.8333 40.0005 16.6667 40.0005H58.6667ZM36.6667 56.6672H56.6667C57.6111 56.6672 58.4022 56.3472 59.04 55.7072C59.68 55.0694 60 54.2783 60 53.3338C60 52.3894 59.68 51.5972 59.04 50.9572C58.4022 50.3194 57.6111 50.0005 56.6667 50.0005H36.6667C35.7222 50.0005 34.9311 50.3194 34.2933 50.9572C33.6533 51.5972 33.3333 52.3894 33.3333 53.3338C33.3333 54.2783 33.6533 55.0694 34.2933 55.7072C34.9311 56.3472 35.7222 56.6672 36.6667 56.6672ZM23.3333 56.6672C24.2778 56.6672 25.07 56.3472 25.71 55.7072C26.3478 55.0694 26.6667 54.2783 26.6667 53.3338C26.6667 52.3894 26.3478 51.5972 25.71 50.9572C25.07 50.3194 24.2778 50.0005 23.3333 50.0005C22.3889 50.0005 21.5967 50.3194 20.9567 50.9572C20.3189 51.5972 20 52.3894 20 53.3338C20 54.2783 20.3189 55.0694 20.9567 55.7072C21.5967 56.3472 22.3889 56.6672 23.3333 56.6672Z" />
             </DrawingImage.Drawing>
         </DrawingImage>
@@ -137,26 +137,20 @@
             <DrawingImage.Drawing>
                 <DrawingGroup>
                     <!-- Body -->
-                    <GeometryDrawing Brush="{StaticResource Brush_Text_Secondary}" 
+                    <GeometryDrawing Brush="{DynamicResource Brush_Text_Secondary}" 
                                      Geometry="M58.6667 40.0005L14.75 24.0838C13.9167 23.806 13.32 23.2505 12.96 22.4172C12.5978 21.5838 12.5556 20.7227 12.8333 19.8338C13.1111 18.9449 13.68 18.3194 14.54 17.9572C15.4022 17.5972 16.2778 17.556 17.1667 17.8338L66 35.6672C67.1111 36.1116 68.0556 36.8894 68.8333 38.0005C69.6111 39.1116 70 40.3338 70 41.6672V60.0005C70 61.8338 69.3478 63.4038 68.0433 64.7105C66.7367 66.0149 65.1667 66.6672 63.3333 66.6672H16.6667C14.8333 66.6672 13.2633 66.0149 11.9567 64.7105C10.6522 63.4038 10 61.8338 10 60.0005V46.6672C10 44.8338 10.6522 43.2638 11.9567 41.9572C13.2633 40.6527 14.8333 40.0005 16.6667 40.0005H58.6667ZM36.6667 56.6672H56.6667C57.6111 56.6672 58.4022 56.3472 59.04 55.7072C59.68 55.0694 60 54.2783 60 53.3338C60 52.3894 59.68 51.5972 59.04 50.9572C58.4022 50.3194 57.6111 50.0005 56.6667 50.0005H36.6667C35.7222 50.0005 34.9311 50.3194 34.2933 50.9572C33.6533 51.5972 33.3333 52.3894 33.3333 53.3338C33.3333 54.2783 33.6533 55.0694 34.2933 55.7072C34.9311 56.3472 35.7222 56.6672 36.6667 56.6672ZM23.3333 56.6672C24.2778 56.6672 25.07 56.3472 25.71 55.7072C26.3478 55.0694 26.6667 54.2783 26.6667 53.3338C26.6667 52.3894 26.3478 51.5972 25.71 50.9572C25.07 50.3194 24.2778 50.0005 23.3333 50.0005C22.3889 50.0005 21.5967 50.3194 20.9567 50.9572C20.3189 51.5972 20 52.3894 20 53.3338C20 54.2783 20.3189 55.0694 20.9567 55.7072C21.5967 56.3472 22.3889 56.6672 23.3333 56.6672Z" />
                     <!-- White Circle -->
                     <GeometryDrawing Brush="White" Geometry="M63.5 61.5 m -10.5, 0 a 10.5,10.5 0 1,0 21,0 a 10.5,10.5 0 1,0 -21,0" />
                     <!-- Red X -->
-                    <GeometryDrawing Brush="{StaticResource Brush_Accent}" 
+                    <GeometryDrawing Brush="{DynamicResource Brush_Accent}" 
                                      Geometry="M68.4496 57.5504C68.5614 57.6619 68.65 57.7943 68.7105 57.9401C68.771 58.0859 68.8021 58.2422 68.8021 58.4C68.8021 58.5578 68.771 58.7141 68.7105 58.8599C68.65 59.0057 68.5614 59.1381 68.4496 59.2496L65.6968 62L68.4496 64.7504C68.5612 64.862 68.6497 64.9944 68.7101 65.1402C68.7704 65.286 68.8015 65.4422 68.8015 65.6C68.8015 65.7578 68.7704 65.914 68.7101 66.0598C68.6497 66.2056 68.5612 66.338 68.4496 66.4496C68.338 66.5612 68.2056 66.6497 68.0598 66.7101C67.914 66.7704 67.7578 66.8015 67.6 66.8015C67.4422 66.8015 67.286 66.7704 67.1402 66.7101C66.9944 66.6497 66.862 66.5612 66.7504 66.4496L64 63.6968L61.2496 66.4496C61.138 66.5612 61.0056 66.6497 60.8598 66.7101C60.714 66.7704 60.5578 66.8015 60.4 66.8015C60.2422 66.8015 60.086 66.7101 59.9402 66.7101C59.7944 66.6497 59.662 66.5612 59.5504 66.4496C59.4388 66.338 59.3503 66.2056 59.2899 66.0598C59.2296 65.914 59.1985 65.7578 59.1985 65.6C59.1985 65.4422 59.2296 65.286 59.2899 65.1402C59.3503 64.9944 59.4388 64.862 59.5504 64.7504L62.3032 62L59.5504 59.2496C59.4388 59.138 59.3503 59.0056 59.2899 58.8598C59.2296 58.714 59.1985 58.5578 59.1985 58.4C59.1985 58.2422 59.2296 58.086 59.2899 57.9402C59.3503 57.7944 59.4388 57.662 59.5504 57.5504C59.662 57.4388 59.7944 57.3503 59.9402 57.2899C60.086 57.2296 60.2422 57.1985 60.4 57.1985C60.5578 57.1985 60.714 57.2296 60.8598 57.2899C61.0056 57.3503 61.138 57.4388 61.2496 57.5504L64 60.3032L66.7504 57.5504C66.8619 57.4386 66.9943 57.35 67.1401 57.2895C67.2859 57.229 67.4422 57.1979 67.6 57.1979C67.7578 57.1979 67.9141 57.229 68.0599 57.2895C68.2057 57.35 68.3381 57.4386 68.4496 57.5504ZM52 62C52 58.8174 53.2643 55.7652 55.5147 53.5147C57.7652 51.2643 60.8174 50 64 50C67.1826 50 70.2348 51.2643 72.4853 53.5147C74.7357 55.7652 76 58.8174 76 62C76 65.1826 74.7357 68.2348 72.4853 70.4853C70.2348 72.7357 67.1826 74 64 74C60.8174 74 57.7652 72.7357 55.5147 70.4853C53.2643 68.2348 52 65.1826 52 62V62ZM64 52.4C61.4539 52.4 59.0121 53.4114 57.2118 55.2118C55.4114 57.0121 54.4 59.4539 54.4 62C54.4 64.5461 55.4114 66.9879 57.2118 68.7882C59.0121 70.5886 61.4539 71.6 64 71.6C66.5461 71.6 68.9879 70.5886 70.7882 68.7882C72.5886 66.9879 73.6 64.5461 73.6 62C73.6 59.4539 72.5886 57.0121 70.7882 55.2118C68.9879 53.4114 66.5461 52.4 64 52.4Z" />
                 </DrawingGroup>
             </DrawingImage.Drawing>
         </DrawingImage>
     </Window.Resources>
 
-    <!-- Main Background: "Frame" with subtle gradient/texture feel -->
-    <Grid>
-        <Grid.Background>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#F2252525" Offset="0"/>
-                <GradientStop Color="#E61E1E1E" Offset="1"/>
-            </LinearGradientBrush>
-        </Grid.Background>
+    <!-- Main Background: "Frame" with dynamic base color -->
+    <Grid Background="{DynamicResource Brush_Background_Base}">
         <Grid.RowDefinitions>
             <RowDefinition Height="32"/>
             <RowDefinition Height="*"/>
@@ -169,15 +163,15 @@
                 <!-- App Icon -->
                 <Image Source="/Assets/Icon.png" Width="20" Height="20" Margin="0,0,10,0"/>
                 <!-- Logo Text if needed, or just Title -->
-                <TextBlock Text="Qscan" FontSize="13" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Center"/>
+                <TextBlock Text="Qscan" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource Brush_Text_Primary}" VerticalAlignment="Center"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True">
                 <Button Style="{StaticResource CaptionButtonStyle}" Click="OnMinimizeClick">
-                    <Path Data="M0,0 H10" Stroke="White" StrokeThickness="2" Width="10" Height="2" VerticalAlignment="Center"/>
+                    <Path Data="M0,0 H10" Stroke="{DynamicResource Brush_Text_Primary}" StrokeThickness="2" Width="10" Height="2" VerticalAlignment="Center"/>
                 </Button>
                 <Button Style="{StaticResource CaptionButtonStyle}" Click="OnMaximizeRestoreClick">
-                    <Path Data="M0,0 H10 V10 H0 Z" Stroke="White" StrokeThickness="1.5" Width="10" Height="10" VerticalAlignment="Center"/>
+                    <Path Data="M0,0 H10 V10 H0 Z" Stroke="{DynamicResource Brush_Text_Primary}" StrokeThickness="1.5" Width="10" Height="10" VerticalAlignment="Center"/>
                 </Button>
                 <Button Click="OnCloseClick">
                     <Button.Style>
@@ -190,7 +184,7 @@
                             </Style.Triggers>
                         </Style>
                     </Button.Style>
-                    <Path Data="M0,0 L10,10 M0,10 L10,0" Stroke="White" StrokeThickness="1.5" Width="10" Height="10" VerticalAlignment="Center"/>
+                    <Path Data="M0,0 L10,10 M0,10 L10,0" Stroke="{DynamicResource Brush_Text_Primary}" StrokeThickness="1.5" Width="10" Height="10" VerticalAlignment="Center"/>
                 </Button>
             </StackPanel>
         </Grid>
@@ -210,49 +204,33 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Grid.Row="0" Margin="0,16,0,0">
-                        <RadioButton Style="{StaticResource SidebarButton}" GroupName="Sidebar" Tag="{StaticResource Icon_Home}" Content="Home" IsChecked="True"/>
+                        <RadioButton Style="{StaticResource SidebarButton}" GroupName="Sidebar" Tag="{StaticResource Icon_Home}" Content="Home" IsChecked="True"
+                                     Command="{Binding NavigateCommand}" CommandParameter="Home"/>
                         <RadioButton Style="{StaticResource SidebarButton}" GroupName="Sidebar" Tag="{StaticResource Icon_Workflow}" Content="Workflow"/>
                     </StackPanel>
 
                     <StackPanel Grid.Row="1" Margin="0,0,0,16">
-                        <RadioButton Style="{StaticResource SidebarButton}" GroupName="Sidebar" Tag="{StaticResource Icon_Settings}" Content="Setting"/>
+                        <RadioButton Style="{StaticResource SidebarButton}" GroupName="Sidebar" Tag="{StaticResource Icon_Settings}" Content="Setting"
+                                     Command="{Binding NavigateCommand}" CommandParameter="Settings"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- Content: Lighter, Transparent BG for Acrylic feel -->
-            <Border Grid.Column="1" Background="#B31C2126" CornerRadius="10,0,0,0" BorderBrush="#B31C2126" BorderThickness="1,1,0,0">
+            <Border Grid.Column="1" Background="{DynamicResource Brush_Background_Surface}" Opacity="0.8" CornerRadius="10,0,0,0" BorderBrush="{DynamicResource Brush_Border_Subtle}" BorderThickness="1,1,0,0">
                 <Border.Effect>
-                    <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
+                    <DropShadowEffect Color="{Binding Source={StaticResource Brush_Background_Base}, Path=Color}" BlurRadius="30" ShadowDepth="0" Opacity="0.5"/>
                 </Border.Effect>
-                <Grid Background="Transparent">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <Grid Grid.Row="0" Margin="32,24,32,24">
-                        <TextBlock Text="Recent Scans" FontSize="28" FontWeight="SemiBold" Foreground="White"/>
-                    </Grid>
-
-                    <ScrollViewer Grid.Row="1" Margin="32,0,0,0" Padding="0,0,32,32" HorizontalScrollBarVisibility="Disabled">
-                        <WrapPanel Orientation="Horizontal">
-                            <!-- New Scan Removed as requested -->
-                            <local:DocCard Title="Documents 1.pdf" Date="12/10/2021" Size="175.5 MB"/>
-                            <local:DocCard Title="Documents 2.pdf" Date="12/10/2021" Size="139.7 KB"/>
-                            <local:DocCard Title="Documents 3.pdf" Date="12/10/2021" Size="12.9 MB"/>
-                        </WrapPanel>
-                    </ScrollViewer>
-                </Grid>
+                <ContentControl Content="{Binding CurrentView}"/>
             </Border>
         </Grid>
 
         <!-- StatusBar: Bottm alignment -->
-        <Border Grid.Row="2" Background="#0DFFFFFF" BorderBrush="#1AFFFFFF" BorderThickness="0,1,0,0">
+        <Border Grid.Row="2" Background="{DynamicResource Brush_Background_Surface}" Opacity="0.9" BorderBrush="{DynamicResource Brush_Border_Subtle}" BorderThickness="0,1,0,0">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0">
                 <!-- Pulsing indicator if searching -->
                 <Grid Margin="0,0,10,0" VerticalAlignment="Center">
-                    <Ellipse x:Name="StatusDot" Fill="{StaticResource Brush_Accent}" Width="8" Height="8">
+                    <Ellipse x:Name="StatusDot" Fill="{DynamicResource Brush_Accent}" Width="8" Height="8">
                         <Ellipse.Style>
                             <Style TargetType="Ellipse">
                                 <Style.Triggers>
@@ -290,7 +268,7 @@
                     </Image.Style>
                 </Image>
                 
-                <TextBlock FontSize="11" Foreground="{StaticResource Brush_Text_Secondary}" VerticalAlignment="Center">
+                <TextBlock FontSize="11" Foreground="{DynamicResource Brush_Text_Secondary}" VerticalAlignment="Center">
                     <Run Text="Q30 Scanner: "/>
                     <Run Text="{Binding Q30StatusText, FallbackValue='Searching for connection...'}" FontWeight="SemiBold"/>
                 </TextBlock>
