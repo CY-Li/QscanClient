@@ -3,8 +3,137 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:utils="clr-namespace:QscanClient.Utils"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="1000">
+             UseLayoutRounding="True"
+             SnapsToDevicePixels="True"
+             d:DesignHeight="700" d:DesignWidth="1000"
+             Focusable="True">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Up" Command="{Binding SelectedBatch.PreviousImageCommand}"/>
+        <KeyBinding Key="Down" Command="{Binding SelectedBatch.NextImageCommand}"/>
+    </UserControl.InputBindings>
+    <UserControl.Resources>
+        <Style x:Key="ControlBarButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Margin" Value="2,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="20"
+                                RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1"/>
+                            </Border.RenderTransform>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#33FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#55FFFFFF"/>
+                                <Setter TargetName="border" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Header Icon Button Style (Circular White Hover) - used by Back button -->
+        <Style x:Key="HeaderIconButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1AFFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#33FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Header Delete Button Style (Circular Red Hover) -->
+        <Style x:Key="DeleteIconButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1AF44336"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#33F44336"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Small Circular Trash Delete Button Style (for Thumbnails) -->
+        <Style x:Key="SmallTrashButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#CC1E1E1E"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Opacity" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="14"
+                                BorderBrush="#33FFFFFF" BorderThickness="1">
+                            <Path Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19V4M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" 
+                                  Fill="{TemplateBinding Foreground}" Width="14" Height="14" Stretch="Uniform"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FFF44336"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="Transparent"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Grid}}" Value="True">
+                    <Setter Property="Opacity" Value="1"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    
     <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -13,88 +142,160 @@
 
         <!-- Header -->
         <Grid Grid.Row="0" Margin="32,48,32,24">
-            <StackPanel Orientation="Horizontal">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="0">
                 <Button Command="{Binding NavigateCommand}" CommandParameter="Home" 
-                        Background="Transparent" BorderThickness="0" Margin="0,0,16,0">
+                        Style="{StaticResource HeaderIconButtonStyle}" Margin="0,0,16,0" VerticalAlignment="Center">
                     <Path Data="M19,11H7.83l5.59-5.59L12,4l-8,8l8,8l1.41-1.41L7.83,13H19V11z" 
                           Fill="{DynamicResource Brush_Text_Primary}" Width="24" Height="24" Stretch="Uniform"/>
                 </Button>
-                <StackPanel>
+                <StackPanel VerticalAlignment="Center">
                     <TextBlock Text="{Binding SelectedBatch.Title}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource Brush_Text_Primary}"/>
-                    <TextBlock Text="{Binding SelectedBatch.DateFormatted}" FontSize="13" Foreground="{DynamicResource Brush_Text_Secondary}"/>
+                    <TextBlock Text="{Binding SelectedBatch.FullDateFormatted}" FontSize="13" Foreground="{DynamicResource Brush_Text_Secondary}"/>
                 </StackPanel>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <Button Content="Export PDF" Padding="16,8" Margin="0,0,12,0" 
-                        Background="{DynamicResource Brush_Accent_Gradient}" Foreground="White" BorderThickness="0">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="6"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-                <Button Content="Delete Batch" Padding="16,8" Background="Transparent" 
-                        Foreground="#E81123" BorderBrush="#20000000" BorderThickness="1">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="6"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-            </StackPanel>
+            <Button Grid.Column="1" Command="{Binding DeleteBatchCommand}" 
+                    Style="{StaticResource DeleteIconButtonStyle}" ToolTip="Delete Batch">
+                <Path Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19V4M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" 
+                      Fill="#FFF44336" Width="22" Height="22" Stretch="Uniform"/>
+            </Button>
         </Grid>
 
         <!-- Content Area -->
         <Grid Grid.Row="1" Margin="32,0,32,32">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="300"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Main Preview Area -->
-            <Border Grid.Column="0" Background="{DynamicResource Brush_Background_Surface}" CornerRadius="12" Margin="0,0,24,0">
-                <Grid>
-                    <TextBlock Text="IMAGE PREVIEW" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                               Foreground="{DynamicResource Brush_Text_Secondary}" Opacity="0.3" FontSize="24" FontWeight="Bold"/>
-                    <!-- Actual image preview would go here -->
-                </Grid>
-            </Border>
-
-            <!-- Thumbnail Sidebar/Gallery -->
-            <Border Grid.Column="1" Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" 
-                    BorderBrush="{DynamicResource Brush_Border_Subtle}" BorderThickness="1">
+            <!-- Thumbnail Sidebar/Gallery (Left) -->
+            <Border Grid.Column="0" Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" 
+                    BorderBrush="{DynamicResource Brush_Border_Subtle}" BorderThickness="1" Margin="0,0,24,0">
                 <Grid Margin="12">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     
-                    <TextBlock Text="Images (RAW JPGs)" FontWeight="SemiBold" Margin="4,0,0,12" Foreground="{DynamicResource Brush_Text_Primary}"/>
-                    
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                        <WrapPanel Orientation="Horizontal">
-                            <!-- Placeholder Image Thumbnails -->
+                        <StackPanel>
                             <ItemsControl ItemsSource="{Binding SelectedBatch.ImagePaths}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Width="110" Height="150" Background="{DynamicResource Brush_Background_Base}" 
-                                                Margin="4" CornerRadius="4" BorderBrush="{DynamicResource Brush_Border_Subtle}" BorderThickness="1">
-                                            <Grid>
-                                                <TextBlock Text="JPG" VerticalAlignment="Center" HorizontalAlignment="Center" 
-                                                           Opacity="0.2" FontSize="10" Foreground="{DynamicResource Brush_Text_Primary}"/>
-                                            </Grid>
-                                        </Border>
+                                        <Grid Margin="4,4,4,12">
+                                            <Button Command="{Binding DataContext.SelectedBatch.SelectImageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                    CommandParameter="{Binding}"
+                                                    Padding="0" Background="Transparent" BorderThickness="0">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border x:Name="border" Height="180" Background="{DynamicResource Brush_Background_Base}" 
+                                                                CornerRadius="8" BorderBrush="{DynamicResource Brush_Border_Subtle}" BorderThickness="1">
+                                                            <Grid>
+                                                                <Image Source="{Binding}" Stretch="UniformToFill" Margin="2" RenderOptions.BitmapScalingMode="Fant"/>
+                                                            </Grid>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource Brush_Accent}"/>
+                                                                <Setter TargetName="border" Property="BorderThickness" Value="2"/>
+                                                                <Setter TargetName="border" Property="Background" Value="{DynamicResource Brush_Background_Alt}"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                            
+                                            <!-- Delete Image Button (Trash Can, Hidden by default, visible on hover) -->
+                                            <Button Style="{StaticResource SmallTrashButtonStyle}" 
+                                                    HorizontalAlignment="Right" VerticalAlignment="Top"
+                                                    Margin="0,8,8,0"
+                                                    Command="{Binding DataContext.SelectedBatch.DeleteImageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"
+                                                    ToolTip="Delete Image"/>
+                                        </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            <!-- Mock thumbs if empty -->
-                            <Border Width="110" Height="150" Background="{DynamicResource Brush_Background_Base}" Margin="4" CornerRadius="4"/>
-                            <Border Width="110" Height="150" Background="{DynamicResource Brush_Background_Base}" Margin="4" CornerRadius="4"/>
-                            <Border Width="110" Height="150" Background="{DynamicResource Brush_Background_Base}" Margin="4" CornerRadius="4"/>
-                            <Border Width="110" Height="150" Background="{DynamicResource Brush_Background_Base}" Margin="4" CornerRadius="4"/>
-                        </WrapPanel>
+                            <!-- Mock thumbs if empty/design time -->
+                            <Border Height="180" Background="{DynamicResource Brush_Background_Base}" Margin="4,4,4,12" CornerRadius="8" Visibility="Collapsed"/>
+                            <Border Height="180" Background="{DynamicResource Brush_Background_Base}" Margin="4,4,4,12" CornerRadius="8" Visibility="Collapsed"/>
+                        </StackPanel>
                     </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- Main Preview Area (Right) -->
+            <Border Grid.Column="1" Background="{DynamicResource Brush_Background_Alt}" CornerRadius="12"
+                    BorderBrush="{DynamicResource Brush_Border_Subtle}" BorderThickness="1">
+                <Grid>
+                    <!-- Default Placeholder -->
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedBatch.SelectedImagePath}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding SelectedBatch.SelectedImagePath}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <Path Data="M21,19V5c0-1.1-0.9-2-2-2H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14C20.1,21,21,20.1,21,19z M8.5,13.5l2.5,3.01L14.5,12l4.5,6H5L8.5,13.5z" 
+                              Fill="{DynamicResource Brush_Text_Secondary}" Opacity="0.1" Stretch="Uniform" Width="64" Height="64" Margin="0,0,0,24"/>
+                        <TextBlock Text="PREVIEW" HorizontalAlignment="Center"
+                                   Foreground="{DynamicResource Brush_Text_Secondary}" Opacity="0.4" FontSize="14" FontWeight="SemiBold"/>
+                    </StackPanel>
+
+                    <!-- Selected Image Display (Simulation) -->
+                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="12">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedBatch.SelectedImagePath}" Value="">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding SelectedBatch.SelectedImagePath}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <utils:ZoomBorder x:Name="TheZoomBorder" Background="Transparent" ClipToBounds="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                            <Image Source="{Binding SelectedBatch.SelectedImagePath}" 
+                                   Stretch="Uniform" 
+                                   RenderOptions.BitmapScalingMode="Fant"/>
+                        </utils:ZoomBorder>
+
+                        <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,24"
+                                Background="#CC1E1E1E" CornerRadius="24" Padding="8,6"
+                                BorderBrush="#44FFFFFF" BorderThickness="1">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Click="ZoomOut_Click" ToolTip="縮小 (Zoom Out)" Style="{StaticResource ControlBarButtonStyle}">
+                                    <Path Data="M15.5,14L20.5,19L19,20.5L14,15.5V14.71L13.73,14.43C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.43,13.73L14.71,14H15.5M9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14M7,9H12V10H7V9Z" 
+                                          Fill="White" Width="20" Height="20" Stretch="Uniform"/>
+                                </Button>
+                                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="6,10" Background="#33FFFFFF"/>
+                                <Button Click="Reset_Click" ToolTip="重置大小 (Fit to Screen)" Style="{StaticResource ControlBarButtonStyle}">
+                                    <Path Data="M19,12H17V15H14V17H19V12M7,9H10V7H5V12H7V9M21,3H3C1.9,3 1,3.9 1,5V19C1,20.1 1.9,21 3,21H21C22.1,21 23,20.1 23,19V5C23,3.9 22.1,3 21,3M21,19H3V5H21V19Z" 
+                                          Fill="White" Width="22" Height="22" Stretch="Uniform"/>
+                                </Button>
+                                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="6,10" Background="#33FFFFFF"/>
+                                <Button Click="ZoomIn_Click" ToolTip="放大 (Zoom In)" Style="{StaticResource ControlBarButtonStyle}">
+                                    <Path Data="M15.5,14L20.5,19L19,20.5L14,15.5V14.71L13.73,14.43C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.43,13.73L14.71,14H15.5M9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14M12,10H10V12H9V10H7V9H9V7H10V9H12V10Z" 
+                                          Fill="White" Width="20" Height="20" Stretch="Uniform"/>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
                 </Grid>
             </Border>
         </Grid>

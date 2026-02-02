@@ -33,6 +33,53 @@
 - `src/QscanClient/Views`: 獨立的視圖處理，包含 `HomeView` 與 `SettingsView`。
 - `src/QscanClient/DocCard.xaml`: 高度封裝的文件展示組件。
 
+## � 介面與功能詳細規格 (UI/UX Specifications)
+
+本專案採用 View-based Navigation 架構，以下為各視圖的詳細規格分析：
+
+### 1. 應用程式框架 (App Shell) - `MainWindow`
+作為整個應用程式的容器，負責全域導航與狀態顯示。
+- **標題列 (TitleBar)**:
+  - 整合式視窗控制 (WindowChrome)，支援拖曳移動。
+  - **Debug 工具**: 包含 "Simulate" 按鈕，可快速切換模擬掃描狀態。
+- **側邊導覽列 (Sidebar)**:
+  - 提供 `Home` (首頁)、`Workflow` (工作流 - 預留)、`Settings` (設定) 的導航切換。
+  - 支援單選按鈕樣式 (RadioButton) 的視覺狀態管理。
+- **底部狀態列 (StatusBar)**:
+  - **連接狀態監控**: 顯示 Q30 掃描器的連線狀態 (Searching / Connected / Disconnected)。
+  - **視覺回饋**: 透過不同顏色的呼吸燈號 (紅/綠/橙) 與圖標變化，提供即時硬體狀態指示。
+
+### 2. 首頁 (Home View)
+監控中心與歷史紀錄的儀表板。
+- **即時掃描面板 (Live Session Panel)**:
+  - **觸發機制**: 僅在 `IsScanning = True` 時自左側滑出。
+  - **動態回饋**: 包含 "Scanning from Q30" 錄製指示燈 (紅點呼吸動畫)。
+  - **進度顯示**: 中央顯示目前掃描頁數計數器，搭配 Indeterminate 旋轉動畫環。
+- **最近掃描列表 (Recent Scans)**:
+  - 使用 `DocCard` 組件呈現歷史批次。
+  - 支援響應式排列 (WrapPanel)，顯示批次名稱 (Timestamp)、文件數量與日期。
+  - **互動**: 點擊卡片觸發 `SelectBatchCommand` 並導航至詳情頁。
+
+### 3. 批次詳情頁 (Detail View)
+特定掃描批次的檢視與管理介面。
+- **頂部工具列 (Header)**:
+  - **導航**: 返回按鈕 (Back Button) 回到首頁。
+  - **資訊**: 顯示批次標題與建立時間。
+  - **操作區**: 包含 "Export PDF" (匯出) 與 "Delete Batch" (刪除) 功能按鈕。
+- **內容區域 (Content Area)**:
+  - **主預覽區 (Main Preview)**: 左側大區塊，用於檢視選定頁面的高解析度影像。
+  - **縮圖側欄 (Thumbnail Gallery)**: 右側卷軸清單，列出該批次所有掃描頁面的縮圖 (JPG)。
+
+### 4. 收件匣 (Inbox View)
+分別檢視來自對應不同Workflow的文件，預設會有「Quick Scan」這個分類，其餘則是由使用者從Workflow頁面定義。
+
+### 5. 工作流 (Workflow View)
+定義工作流的掃描參數、IP參數、輸出路徑、OCR設定等。
+
+### 6. 設定頁 (Settings View)
+- **外觀設定 (Appearance)**:
+  - **主題切換**: 提供 Light / Dark 雙色系切換開關，綁定 `IsDarkTheme` 屬性，即時刷新全域資源字典。
+
 ## 📅 開發藍圖 (Next Steps)
 
 1. **掃描器連接實作**:

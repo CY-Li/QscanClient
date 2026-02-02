@@ -95,9 +95,50 @@ public partial class MainViewModel : ObservableObject
     private void LoadMockData()
     {
         var now = DateTime.Now;
-        Batches.Add(new ScanBatch { Title = now.AddDays(-1).ToString("yyyyMMdd_HHmmss"), Timestamp = now.AddDays(-1), ImageCount = 12 });
-        Batches.Add(new ScanBatch { Title = now.AddDays(-2).ToString("yyyyMMdd_HHmmss"), Timestamp = now.AddDays(-2), ImageCount = 5 });
-        Batches.Add(new ScanBatch { Title = now.AddDays(-3).ToString("yyyyMMdd_HHmmss"), Timestamp = now.AddDays(-3), ImageCount = 8 });
+        var r = new Random();
+
+        // Get actual images from specific folder
+        string specificPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..", "pics", "塗鴉智能（Tuya Smart）市場調查報告");
+        
+        var imageFiles = new System.Collections.Generic.List<string>();
+        
+        if (System.IO.Directory.Exists(specificPath))
+        {
+            imageFiles.AddRange(System.IO.Directory.GetFiles(specificPath, "*.png"));
+            imageFiles.AddRange(System.IO.Directory.GetFiles(specificPath, "*.jpg"));
+            // Ensure they are sorted so pages appear in order
+            imageFiles.Sort();
+        }
+
+        for (int i = 0; i < 8; i++)
+        {
+            var date = now.AddDays(-i).AddHours(-r.Next(0, 12));
+            
+            // If we have specific images, use their count to simulate a real document batch
+            int imageCount = imageFiles.Count > 0 ? imageFiles.Count : r.Next(3, 10);
+            
+            var batch = new ScanBatch 
+            { 
+                Title = date.ToString("yyyyMMdd_HHmmss"), 
+                Timestamp = date, 
+                ImageCount = imageCount 
+            };
+
+            for (int j = 0; j < imageCount; j++)
+            {
+                if (imageFiles.Count > 0)
+                {
+                    // Use the sorted images in order
+                    batch.ImagePaths.Add(imageFiles[j % imageFiles.Count]);
+                }
+                else
+                {
+                    batch.ImagePaths.Add($"mock_image_{j}.jpg");
+                }
+            }
+
+            Batches.Add(batch);
+        }
     }
 
     [RelayCommand]
@@ -168,7 +209,22 @@ public partial class MainViewModel : ObservableObject
     public void SelectBatch(ScanBatch batch)
     {
         SelectedBatch = batch;
+        if (batch != null && batch.ImagePaths.Count > 0 && string.IsNullOrEmpty(batch.SelectedImagePath))
+        {
+            batch.SelectedImagePath = batch.ImagePaths[0];
+        }
         Navigate("Detail");
+    }
+
+    [RelayCommand]
+    public void DeleteBatch()
+    {
+        if (SelectedBatch != null)
+        {
+            Batches.Remove(SelectedBatch);
+            SelectedBatch = null;
+            Navigate("Home");
+        }
     }
 
     [RelayCommand]
