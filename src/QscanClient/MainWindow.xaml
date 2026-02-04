@@ -184,7 +184,9 @@
                     <StackPanel Grid.Row="0" Margin="0,16,0,0">
                         <RadioButton Style="{StaticResource SidebarRadioButtonStyle}" GroupName="Sidebar" Tag="{StaticResource Icon_Home}" Content="Home" IsChecked="True"
                                      Command="{Binding NavigateCommand}" CommandParameter="Home"/>
-                        <RadioButton Style="{StaticResource SidebarRadioButtonStyle}" GroupName="Sidebar" Tag="{StaticResource Icon_Workflow}" Content="Workflow"/>
+                        <RadioButton Style="{StaticResource SidebarRadioButtonStyle}" GroupName="Sidebar" Tag="{StaticResource Icon_Workflow}" Content="Workflow"
+                                     Command="{Binding NavigateCommand}" CommandParameter="Workflow"/>
+
                     </StackPanel>
 
                     <StackPanel Grid.Row="1" Margin="0,0,0,16">

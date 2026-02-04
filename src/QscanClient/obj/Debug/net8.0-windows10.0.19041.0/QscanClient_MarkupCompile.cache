@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS10_0_19041_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS10_0_19041_0_OR_GREATER;WINDOWS10_0_18362_0_OR_GREATER;WINDOWS10_0_17763_0_OR_GREATER;WINDOWS8_0_OR_GREATER;WINDOWS7_0_OR_GREATER
 c:\Users\Jimmy\QscanClient\src\QscanClient\App.xaml
-71909218398
+9-377442261
 22-169199164
-13-1037740158
+19-1044704690
 204-1807529736
-DocCard.xaml;MainWindow.xaml;Themes\DarkTheme.xaml;Themes\LightTheme.xaml;Views\DetailView.xaml;Views\HomeView.xaml;Views\SettingsView.xaml;
+DocCard.xaml;MainWindow.xaml;Themes\DarkTheme.xaml;Themes\LightTheme.xaml;Views\DetailView.xaml;Views\HomeView.xaml;Views\SettingsView.xaml;Views\WorkflowEditorView.xaml;Views\WorkflowView.xaml;
 
 True
 

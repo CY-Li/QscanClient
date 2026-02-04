@@ -12,6 +12,82 @@
 
             <!-- Converters -->
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            
+            <!-- Shared Gallery & Workflow Styles -->
+            <Style x:Key="BadgeStyle" TargetType="Border">
+                <Setter Property="CornerRadius" Value="4"/>
+                <Setter Property="Padding" Value="6,2"/>
+                <Setter Property="Margin" Value="0,0,8,0"/>
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+            </Style>
+
+            <Style x:Key="OCRBadgeStyle" TargetType="Border" BasedOn="{StaticResource BadgeStyle}">
+                <Setter Property="Background" Value="#33FF5E00"/>
+                <Setter Property="BorderBrush" Value="#66FF5E00"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Style.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="#FFFF8B4D"/>
+                        <Setter Property="FontSize" Value="10"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                    </Style>
+                </Style.Resources>
+            </Style>
+
+            <Style x:Key="AIBadgeStyle" TargetType="Border" BasedOn="{StaticResource BadgeStyle}">
+                <Setter Property="Background" Value="#33FFB800"/>
+                <Setter Property="BorderBrush" Value="#66FFB800"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Style.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="#FFFFD266"/>
+                        <Setter Property="FontSize" Value="10"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                    </Style>
+                </Style.Resources>
+            </Style>
+
+            <Style x:Key="NASBadgeStyle" TargetType="Border" BasedOn="{StaticResource BadgeStyle}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource Brush_Text_Secondary}"/>
+                <Setter Property="Opacity" Value="0.8"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Style.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Secondary}"/>
+                        <Setter Property="FontSize" Value="10"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                    </Style>
+                </Style.Resources>
+            </Style>
+
+            <Style x:Key="ModernCardButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource Brush_Text_Secondary}"/>
+                <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Secondary}"/>
+                <Setter Property="Padding" Value="16,6"/>
+                <Setter Property="MinWidth" Value="80"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource Brush_Sidebar_Hover}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Primary}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource Brush_Text_Primary}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
 
             <!-- Sidebar Button Base template structure (Common for both) -->
             <Style x:Key="SidebarButtonBase" TargetType="Control">

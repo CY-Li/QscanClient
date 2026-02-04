@@ -59,14 +59,30 @@ public partial class MainViewModel : ObservableObject
     private Views.HomeView? _homeView;
     private Views.SettingsView? _settingsView;
     private Views.DetailView? _detailView;
+    private Views.WorkflowView? _workflowView;
+    private Views.WorkflowEditorView? _workflowEditorView;
+
+
+    [ObservableProperty]
+    private WorkflowViewModel? _workflowVM;
+
+    [ObservableProperty]
+    private WorkflowEditorViewModel? _workflowEditorVM;
+
+
 
     public MainViewModel()
     {
         // Initial state
         UpdateStatus(Q30ConnectionStatus.Searching);
         
+        WorkflowVM = new WorkflowViewModel(this);
+        WorkflowEditorVM = new WorkflowEditorViewModel(this);
+
+
         // Mock initial data
         LoadMockData();
+
 
     }
 
@@ -78,6 +94,10 @@ public partial class MainViewModel : ObservableObject
             _homeView = new Views.HomeView { DataContext = this };
             _settingsView = new Views.SettingsView { DataContext = this };
             _detailView = new Views.DetailView { DataContext = this };
+            _workflowView = new Views.WorkflowView { DataContext = this };
+            _workflowEditorView = new Views.WorkflowEditorView { DataContext = this };
+
+
 
             // Initial view
             CurrentView = _homeView;
@@ -235,7 +255,11 @@ public partial class MainViewModel : ObservableObject
             "Home" => _homeView,
             "Settings" => _settingsView,
             "Detail" => _detailView,
+            "Workflow" => _workflowView,
+            "WorkflowEditor" => _workflowEditorView,
+
             _ => (object?)_homeView
+
         };
     }
 
