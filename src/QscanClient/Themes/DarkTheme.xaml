@@ -17,6 +17,14 @@
     <SolidColorBrush x:Key="Brush_Text_Secondary" Color="#B5A89D"/>
     <SolidColorBrush x:Key="Brush_Border_Subtle" Color="#0AFFFFFF"/> <!-- Even more subtle -->
 
+    <!-- Global State & Semantic Controls -->
+    <SolidColorBrush x:Key="Brush_Danger" Color="#F44336"/>
+    <SolidColorBrush x:Key="Brush_Danger_Hover" Color="#33F44336"/>
+    <SolidColorBrush x:Key="Brush_Overlay" Color="#CC15100C"/>
+    <SolidColorBrush x:Key="Brush_Control_Hover" Color="#1AFFFFFF"/> 
+    <SolidColorBrush x:Key="Brush_Control_Pressed" Color="#33FFFFFF"/>
+    <SolidColorBrush x:Key="Brush_Accent_Transparent" Color="#1AFF8B4D"/>
+
     <!-- Depth & Shadows -->
     <DropShadowEffect x:Key="StandardShadow" BlurRadius="40" Opacity="0.25" ShadowDepth="4" Color="Black"/>
     <DropShadowEffect x:Key="WarmGlow" BlurRadius="40" Opacity="0.4" ShadowDepth="0" Color="#261200"/>

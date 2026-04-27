@@ -13,9 +13,6 @@ public partial class WorkflowViewModel : ObservableObject
     public ObservableCollection<Workflow> Workflows { get; } = new();
 
     [ObservableProperty]
-    private Workflow? _selectedWorkflow;
-
-    [ObservableProperty]
     private bool _isEditing;
 
     [ObservableProperty]
@@ -24,24 +21,19 @@ public partial class WorkflowViewModel : ObservableObject
     [ObservableProperty]
     private bool _isSelectingDestination;
 
+    public bool IsEmpty => Workflows.Count == 0;
+
 
     public WorkflowViewModel(MainViewModel mainViewModel)
     {
         _mainViewModel = mainViewModel;
+        Workflows.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsEmpty));
         LoadMockWorkflows();
     }
 
     private void LoadMockWorkflows()
     {
-        Workflows.Add(new Workflow 
-        { 
-            Name = "發票掃描至 NAS", 
-            EnableOCR = true,
-            EnableAISmartNaming = true,
-            NamingFormat = "{YYYY MM DD}_發票",
-            TargetPath = "\\\\NAS-STATION\\Accounting\\Invoices",
-            IsNASDestination = true
-        });
+        // Start with an empty list for production, or add different mocks if needed
     }
 
     [RelayCommand]

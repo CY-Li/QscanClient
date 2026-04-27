@@ -15,7 +15,7 @@
         <Border Grid.Column="0" Width="360" Background="{DynamicResource Brush_Background_Base}" 
                 CornerRadius="10,0,0,0" Margin="0" 
                 Visibility="{Binding IsScanning, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
-            <Grid Margin="32,48,32,32">
+            <Grid Margin="32,48,32,24">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>

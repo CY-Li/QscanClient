@@ -11,6 +11,7 @@ C:\Users\Jimmy\QscanClient\src\QscanClient\bin\Debug\net8.0-windows10.0.19041.0\
 C:\Users\Jimmy\QscanClient\src\QscanClient\bin\Debug\net8.0-windows10.0.19041.0\WinRT.Runtime.dll
 C:\Users\Jimmy\QscanClient\src\QscanClient\obj\Debug\net8.0-windows10.0.19041.0\QscanClient.csproj.AssemblyReference.cache
 C:\Users\Jimmy\QscanClient\src\QscanClient\obj\Debug\net8.0-windows10.0.19041.0\DocCard.baml
+C:\Users\Jimmy\QscanClient\src\QscanClient\obj\Debug\net8.0-windows10.0.19041.0\Themes\ControlStyles.baml
 C:\Users\Jimmy\QscanClient\src\QscanClient\obj\Debug\net8.0-windows10.0.19041.0\Themes\DarkTheme.baml
 C:\Users\Jimmy\QscanClient\src\QscanClient\obj\Debug\net8.0-windows10.0.19041.0\Themes\LightTheme.baml
 C:\Users\Jimmy\QscanClient\src\QscanClient\obj\Debug\net8.0-windows10.0.19041.0\Views\SettingsView.baml

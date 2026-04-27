@@ -8,4 +8,9 @@ public partial class WorkflowEditorView : UserControl
     {
         InitializeComponent();
     }
+
+    private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+    {
+        MainScrollViewer.ScrollToHome();
+    }
 }

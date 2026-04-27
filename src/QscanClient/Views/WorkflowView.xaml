@@ -53,76 +53,72 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Grid Grid.Row="0" Margin="0,0,0,24">
-            <StackPanel>
-                <TextBlock Text="Workflows" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource Brush_Text_Primary}"/>
-                <TextBlock Text="Automate your scanning routines with AI-powered naming and direct network storage" 
-                           FontSize="14" Foreground="{DynamicResource Brush_Text_Secondary}" Margin="0,4,0,0" Opacity="0.8"/>
-            </StackPanel>
+        <Grid Grid.Row="0" Margin="0,0,0,32">
+            <TextBlock Text="Workflow" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource Brush_Text_Primary}" VerticalAlignment="Center"/>
             <Button Command="{Binding WorkflowVM.AddWorkflowCommand}" HorizontalAlignment="Right" VerticalAlignment="Center"
-                    Background="{DynamicResource Brush_Accent_Gradient}" Foreground="White" BorderThickness="0" Padding="20,10" FontWeight="SemiBold" RenderTransformOrigin="0.5,0.5">
-                <Button.RenderTransform>
-                    <ScaleTransform ScaleX="1" ScaleY="1"/>
-                </Button.RenderTransform>
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
-                            <StackPanel Orientation="Horizontal">
-                                <Path x:Name="icon" Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" Fill="White" Width="16" Height="16" Margin="0,0,8,0" Stretch="Uniform"/>
-                                <ContentPresenter VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Effect" Value="{DynamicResource WarmGlow}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Button.Template>
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Trigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.05" Duration="0:0:0.1"/>
-                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.05" Duration="0:0:0.1"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.EnterActions>
-                                <Trigger.ExitActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" Duration="0:0:0.1"/>
-                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" Duration="0:0:0.1"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.ExitActions>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-                New Workflow
+                    Style="{StaticResource HeaderPrimaryActionButtonStyle}" ToolTip="Create new workflow">
+                <Path Data="{StaticResource Icon_Add}" Fill="White" Width="20" Height="20" Stretch="Uniform"/>
             </Button>
         </Grid>
 
-        <!-- Workflow List -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,-12,0">
-            <ItemsControl ItemsSource="{Binding WorkflowVM.Workflows}" Margin="0,0,12,0">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+        <!-- Main Content Area -->
+        <Grid Grid.Row="1">
+            <!-- Workflow List (Visible when NOT empty) -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,0,-12,0">
+                <ScrollViewer.Style>
+                    <Style TargetType="ScrollViewer">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding WorkflowVM.IsEmpty}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ScrollViewer.Style>
+                <ItemsControl ItemsSource="{Binding WorkflowVM.Workflows}" Margin="0,0,12,0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid Margin="12">
                             <!-- Standard DocCard Parity Container -->
-                            <Border x:Name="CardBorder" Width="320" Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="16" BorderThickness="0" Padding="20" Effect="{DynamicResource StandardShadow}" RenderTransformOrigin="0.5,0.5">
-                                <Border.RenderTransform>
-                                    <ScaleTransform ScaleX="1" ScaleY="1"/>
-                                </Border.RenderTransform>
+                            <Border x:Name="CardBorder" Width="320" Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="16" BorderThickness="1" Padding="20" Effect="{DynamicResource StandardShadow}" RenderTransformOrigin="0.5,0.5">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Cursor" Value="Hand"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Setter Property="Margin" Value="0,0,0,0"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Trigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,-4,0,4" Duration="0:0:0.2">
+                                                                <ThicknessAnimation.EasingFunction>
+                                                                    <CubicEase EasingMode="EaseOut"/>
+                                                                </ThicknessAnimation.EasingFunction>
+                                                            </ThicknessAnimation>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </Trigger.EnterActions>
+                                                <Trigger.ExitActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <ThicknessAnimation Storyboard.TargetProperty="Margin" To="0,0,0,0" Duration="0:0:0.2">
+                                                                <ThicknessAnimation.EasingFunction>
+                                                                    <CubicEase EasingMode="EaseOut"/>
+                                                                </ThicknessAnimation.EasingFunction>
+                                                            </ThicknessAnimation>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </Trigger.ExitActions>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -130,125 +126,55 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <!-- Status Badges -->
-                                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,16">
-                                        <Border Style="{StaticResource OCRBadgeStyle}" Visibility="{Binding EnableOCR, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                            <TextBlock Text="OCR"/>
-                                        </Border>
-                                        <Border Style="{StaticResource AIBadgeStyle}" Visibility="{Binding EnableAISmartNaming, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                            <TextBlock Text="AI SMART"/>
-                                        </Border>
-                                        <Border Style="{StaticResource NASBadgeStyle}" Visibility="{Binding IsNASDestination, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                            <TextBlock Text="NAS"/>
-                                        </Border>
-                                    </StackPanel>
+                                    <!-- Interaction Layer -->
+                                    <Button Grid.RowSpan="3" Command="{Binding DataContext.WorkflowVM.EditWorkflowCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                            CommandParameter="{Binding}"
+                                            Background="Transparent" BorderThickness="0" Cursor="Hand" ToolTip="Edit Workflow">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="Transparent" BorderThickness="0"/>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+
+                                    <!-- Status Badges removed -->
 
                                     <!-- Info -->
-                                    <StackPanel Grid.Row="1" Margin="0,0,0,20">
+                                    <StackPanel Grid.Row="1" Margin="0,0,0,20" IsHitTestVisible="False">
                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                                             <Viewbox Width="20" Height="20" Margin="0,0,12,0">
-                                                <Path Data="M12,2L4.5,20.29L5.21,21L12,18L18.79,21L19.5,20.29L12,2Z" Fill="{DynamicResource Brush_Accent}"/>
+                                                <Path Fill="{DynamicResource Brush_Accent}" Stretch="Uniform">
+                                                    <Path.Style>
+                                                        <Style TargetType="Path">
+                                                            <!-- Default PC -->
+                                                            <Setter Property="Data" Value="M320-120v-80h80v-80H160q-33 0-56.5-23.5T80-360v-400q0-33 23.5-56.5T160-840h640q33 0 56.5 23.5T880-760v400q0 33-23.5 56.5T800-280H560v80h80v80H320ZM160-360h640v-400H160v400Zm0 0v-400 400Z"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding DestinationType}" Value="SMB">
+                                                                    <Setter Property="Data" Value="M543.5-63.5Q520-87 520-120q0-23 11-41t29-29v-221q-18-11-29-28.5T520-480q0-33 23.5-56.5T600-560q33 0 56.5 23.5T680-480q0 23-11 40.5T640-411v115l160-53v-62q-18-11-29-28.5T760-480q0-33 23.5-56.5T840-560q33 0 56.5 23.5T920-480q0 23-11 40.5T880-411v119l-240 80v22q18 11 29 29t11 41q0 33-23.5 56.5T600-40q-33 0-56.5-23.5ZM160-160v-560 560Zm0 0q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640H447l-80-80H160v480h280v80H160Z"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding DestinationType}" Value="FTP">
+                                                                    <Setter Property="Data" Value="{StaticResource Icon_FTP}"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Path.Style>
+                                                </Path>
                                             </Viewbox>
                                             <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource Brush_Text_Primary}" VerticalAlignment="Center"/>
                                         </StackPanel>
                                         
                                         <TextBlock Text="Output Destination" FontSize="11" Foreground="{DynamicResource Brush_Text_Secondary}" Opacity="0.6" Margin="0,8,0,4"/>
-                                        <TextBlock Text="{Binding TargetPath}" FontSize="13" Foreground="{DynamicResource Brush_Text_Secondary}" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="{Binding DisplayTargetPath}" FontSize="13" Foreground="{DynamicResource Brush_Text_Secondary}" TextTrimming="CharacterEllipsis"/>
                                     </StackPanel>
 
                                     <!-- Actions -->
                                     <Grid Grid.Row="2">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button Command="{Binding DataContext.WorkflowVM.RunWorkflowCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Content="Launch" 
-                                                    Background="{DynamicResource Brush_Accent_Gradient}" Foreground="White" BorderThickness="0" Padding="24,8" FontWeight="SemiBold" FontSize="12" RenderTransformOrigin="0.5,0.5">
-                                                <Button.RenderTransform>
-                                                    <ScaleTransform ScaleX="1" ScaleY="1"/>
-                                                </Button.RenderTransform>
-                                                <Button.Template>
-                                                    <ControlTemplate TargetType="Button">
-                                                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
-                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                        </Border>
-                                                        <ControlTemplate.Triggers>
-                                                            <Trigger Property="IsMouseOver" Value="True">
-                                                                <Setter TargetName="border" Property="Effect" Value="{DynamicResource WarmGlow}"/>
-                                                            </Trigger>
-                                                        </ControlTemplate.Triggers>
-                                                    </ControlTemplate>
-                                                </Button.Template>
-                                                <Button.Style>
-                                                    <Style TargetType="Button">
-                                                        <Style.Triggers>
-                                                            <Trigger Property="IsMouseOver" Value="True">
-                                                                <Trigger.EnterActions>
-                                                                    <BeginStoryboard>
-                                                                        <Storyboard>
-                                                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.05" Duration="0:0:0.1"/>
-                                                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.05" Duration="0:0:0.1"/>
-                                                                        </Storyboard>
-                                                                    </BeginStoryboard>
-                                                                </Trigger.EnterActions>
-                                                                <Trigger.ExitActions>
-                                                                    <BeginStoryboard>
-                                                                        <Storyboard>
-                                                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" Duration="0:0:0.1"/>
-                                                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" Duration="0:0:0.1"/>
-                                                                        </Storyboard>
-                                                                    </BeginStoryboard>
-                                                                </Trigger.ExitActions>
-                                                            </Trigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Button.Style>
-                                            </Button>
-                                            <Button Command="{Binding DataContext.WorkflowVM.EditWorkflowCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Content="Edit" Margin="12,0,0,0" RenderTransformOrigin="0.5,0.5">
-
-                                                <Button.RenderTransform>
-                                                    <ScaleTransform ScaleX="1" ScaleY="1"/>
-                                                </Button.RenderTransform>
-                                                <Button.Style>
-                                                    <Style TargetType="Button" BasedOn="{StaticResource ModernCardButtonStyle}">
-                                                        <Style.Triggers>
-                                                            <Trigger Property="IsMouseOver" Value="True">
-                                                                <Trigger.EnterActions>
-                                                                    <BeginStoryboard>
-                                                                        <Storyboard>
-                                                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.02" Duration="0:0:0.1"/>
-                                                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.02" Duration="0:0:0.1"/>
-                                                                        </Storyboard>
-                                                                    </BeginStoryboard>
-                                                                </Trigger.EnterActions>
-                                                                <Trigger.ExitActions>
-                                                                    <BeginStoryboard>
-                                                                        <Storyboard>
-                                                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" Duration="0:0:0.1"/>
-                                                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" Duration="0:0:0.1"/>
-                                                                        </Storyboard>
-                                                                    </BeginStoryboard>
-                                                                </Trigger.ExitActions>
-                                                            </Trigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Button.Style>
-                                            </Button>
-                                        </StackPanel>
+                                        <!-- Edit Button Removed -->
                                         
                                         <!-- Actions on Right -->
                                         <Button Command="{Binding DataContext.WorkflowVM.DeleteWorkflowCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" 
-                                                HorizontalAlignment="Right" Background="Transparent" BorderThickness="0" ToolTip="Delete Workflow">
-                                            <Button.Template>
-                                                <ControlTemplate TargetType="Button">
-                                                    <Border x:Name="bd" Padding="8" CornerRadius="6" Background="Transparent">
-                                                        <Path Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19V4M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" Fill="{DynamicResource Brush_Text_Secondary}" Width="16" Height="16" Stretch="Uniform"/>
-                                                    </Border>
-                                                    <ControlTemplate.Triggers>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter TargetName="bd" Property="Background" Value="#1AFF0000"/>
-                                                            <Setter Property="Foreground" Value="#E81123"/>
-                                                        </Trigger>
-                                                    </ControlTemplate.Triggers>
-                                                </ControlTemplate>
-                                            </Button.Template>
+                                                HorizontalAlignment="Right" Style="{StaticResource HeaderDangerActionButtonStyle}" ToolTip="Delete Workflow">
+                                            <Path Data="{StaticResource Icon_Delete}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform"/>
                                         </Button>
                                     </Grid>
                                 </Grid>
@@ -271,8 +197,40 @@
             </ItemsControl>
         </ScrollViewer>
 
+            <!-- Empty State (Visible when empty) -->
+            <Grid x:Name="EmptyStateOverlay">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding WorkflowVM.IsEmpty}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+
+                <!-- Guidance Arrow (Top Right) -->
+                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,80,0" Opacity="0.6">
+                    <Path Data="M 0,40 Q 20,40 40,0 M 40,0 L 30,10 M 40,0 L 45,15" Stroke="{DynamicResource Brush_Accent}" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Width="80" Height="80" Stretch="Uniform" Margin="0,0,0,10"/>
+                    <TextBlock Text="Get Started" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Brush_Accent}" HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Center Message -->
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,40">
+                    <Border Width="120" Height="120" Background="{DynamicResource Brush_Accent_Transparent}" CornerRadius="60" Margin="0,0,0,32">
+                        <Path Data="{StaticResource Icon_Workflow}" Fill="{DynamicResource Brush_Accent}" Opacity="0.3" Width="56" Height="56" Stretch="Uniform"/>
+                    </Border>
+                    <TextBlock Text="No Workflows Found" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource Brush_Text_Primary}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Click the button to create your first scanning workflow." FontSize="14" Foreground="{DynamicResource Brush_Text_Secondary}" Margin="0,12,0,0" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
         <!-- Destination Selection Overlay -->
-        <Border Grid.RowSpan="2" Background="#AA15100C" CornerRadius="10,0,0,0" Visibility="{Binding WorkflowVM.IsSelectingDestination, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="-32 -48 -32 -24">
+        <Border x:Name="OverlayBorder" Grid.RowSpan="2" Background="{DynamicResource Brush_Overlay}" CornerRadius="10,0,0,0" 
+                Visibility="{Binding WorkflowVM.IsSelectingDestination, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                Margin="-32 -48 -32 -24" PreviewMouseLeftButtonDown="OverlayBorder_PreviewMouseLeftButtonDown">
 
             <Border Width="760" VerticalAlignment="Center" HorizontalAlignment="Center" Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="20" BorderBrush="{DynamicResource Brush_Border_Subtle}" BorderThickness="1" Padding="48" Effect="{StaticResource StandardShadow}">
                 <Grid>
@@ -295,55 +253,37 @@
                         <!-- Local PC -->
                         <Button Command="{Binding WorkflowVM.SelectDestinationCommand}" CommandParameter="LocalPC" Style="{StaticResource DestinationTileStyle}">
                             <StackPanel>
-                                <Border Width="64" Height="64" Background="#1AFF8B4D" CornerRadius="16" Margin="0,0,0,24">
-                                    <Path Data="M4,6H20V16H4M20,18A2,2 0 0,0 22,16V6C22,4.89 21.1,4 20,4H4C2.89,4 2,4.89 2,6V16A2,2 0 0,0 4,18H0V20H24V18" Fill="{DynamicResource Brush_Accent}" Width="32" Height="32" Stretch="Uniform"/>
+                                <Border Width="64" Height="64" Background="{DynamicResource Brush_Accent_Transparent}" CornerRadius="16" Margin="0,0,0,24">
+                                    <Path Data="M320-120v-80h80v-80H160q-33 0-56.5-23.5T80-360v-400q0-33 23.5-56.5T160-840h640q33 0 56.5 23.5T880-760v400q0 33-23.5 56.5T800-280H560v80h80v80H320ZM160-360h640v-400H160v400Zm0 0v-400 400Z" Fill="{DynamicResource Brush_Accent}" Width="32" Height="32" Stretch="Uniform"/>
                                 </Border>
-                                <TextBlock Text="Local PC" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Primary}"/>
-                                <TextBlock Text="Standard Folder" FontSize="12" Opacity="0.7" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Secondary}" Margin="0,6,0,0"/>
+                                <TextBlock Text="This PC" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Primary}"/>
                             </StackPanel>
                         </Button>
 
                         <!-- SMB -->
                         <Button Command="{Binding WorkflowVM.SelectDestinationCommand}" CommandParameter="SMB" Style="{StaticResource DestinationTileStyle}">
                             <StackPanel>
-                                <Border Width="64" Height="64" Background="#1AFF8B4D" CornerRadius="16" Margin="0,0,0,24">
-                                    <Path Data="M4,1H11L12,2H20A2,2 0 0,1 22,4V18A2,2 0 0,1 20,20H4C2.89,20 2,19.1 2,18V3C2,1.89 2.89,1 4,1M11,13H13V17H11V13M11,7H13V11H11V7" Fill="{DynamicResource Brush_Accent}" Width="32" Height="32" Stretch="Uniform"/>
+                                <Border Width="64" Height="64" Background="{DynamicResource Brush_Accent_Transparent}" CornerRadius="16" Margin="0,0,0,24">
+                                    <Path Data="M543.5-63.5Q520-87 520-120q0-23 11-41t29-29v-221q-18-11-29-28.5T520-480q0-33 23.5-56.5T600-560q33 0 56.5 23.5T680-480q0 23-11 40.5T640-411v115l160-53v-62q-18-11-29-28.5T760-480q0-33 23.5-56.5T840-560q33 0 56.5 23.5T920-480q0 23-11 40.5T880-411v119l-240 80v22q18 11 29 29t11 41q0 33-23.5 56.5T600-40q-33 0-56.5-23.5ZM160-160v-560 560Zm0 0q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640H447l-80-80H160v480h280v80H160Z" Fill="{DynamicResource Brush_Accent}" Width="32" Height="32" Stretch="Uniform"/>
                                 </Border>
-                                <TextBlock Text="NAS / SMB" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Primary}"/>
-                                <TextBlock Text="Network Storage" FontSize="12" Opacity="0.7" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Secondary}" Margin="0,6,0,0"/>
+                                <TextBlock Text="Shared Folder" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Primary}"/>
                             </StackPanel>
                         </Button>
 
                         <!-- FTP -->
                         <Button Command="{Binding WorkflowVM.SelectDestinationCommand}" CommandParameter="FTP" Style="{StaticResource DestinationTileStyle}">
                             <StackPanel>
-                                <Border Width="64" Height="64" Background="#1AFF8B4D" CornerRadius="16" Margin="0,0,0,24">
-                                    <Path Data="M19.35,10.04C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.04C2.34,8.36 0,10.91 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.04M19,18H6A4,4 0 0,1 2,14C2,11.79 3.8,10 6,10C6.3,10 6.6,10.03 6.9,10.1C7.74,7.69 10,6 12,6C14.76,6 17,8.24 17,11V12H19A3,3 0 0,1 22,15A3,3 0 0,1 19,18Z" Fill="{DynamicResource Brush_Accent}" Width="32" Height="32" Stretch="Uniform"/>
+                                <Border Width="64" Height="64" Background="{DynamicResource Brush_Accent_Transparent}" CornerRadius="16" Margin="0,0,0,24">
+                                    <Path Data="M467-120q-73-1-136-14t-110-34.5q-47-21.5-74-50T120-280q0 33 27 61.5t74 50Q268-147 331-134t136 14Zm-15-200q-38-2-73.5-6.5t-67.5-12q-32-7.5-60-17.5t-51-23q23 13 51 23t60 17.5q32 7.5 67.5 12T452-320Zm28-279q89 0 179-26.5T760-679q-11-29-100.5-55T480-760q-91 0-178.5 25.5T200-679q14 27 101.5 53.5T480-599Zm220 479h40v-164l72 72 28-28-120-120-120 120 28 28 72-72v164ZM578.5-98.5Q520-157 520-240t58.5-141.5Q637-440 720-440t141.5 58.5Q920-323 920-240T861.5-98.5Q803-40 720-40T578.5-98.5ZM443-201q3 22 9 42t15 39q-73-1-136-14t-110-34.5q-47-21.5-74-50T120-280v-400q0-66 105.5-113T480-840q149 0 254.5 47T840-680v187q-19-9-39-15t-41-9v-62q-52 29-124 44t-156 15q-85 0-157-15t-123-44v101q51 47 130.5 62.5T480-400h11q-13 18-22.5 38T452-320q-76-4-141-18.5T200-379v99q7 13 30 26.5t56 24q33 10.5 73.5 18T443-201Z" Fill="{DynamicResource Brush_Accent}" Width="32" Height="32" Stretch="Uniform"/>
                                 </Border>
-                                <TextBlock Text="FTP / Cloud" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Primary}"/>
-                                <TextBlock Text="Remote Access" FontSize="12" Opacity="0.7" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Secondary}" Margin="0,6,0,0"/>
+                                <TextBlock Text="FTP / SFTP" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Primary}"/>
                             </StackPanel>
                         </Button>
                     </UniformGrid>
 
-                    <Button Grid.Row="2" Command="{Binding WorkflowVM.CancelSelectionCommand}" Content="Cancel and return to gallery" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,48,0,0" Cursor="Hand">
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <TextBlock Text="{TemplateBinding Content}" FontSize="12" TextDecorations="Underline" Foreground="{DynamicResource Brush_Text_Secondary}" Opacity="0.8">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Style.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Opacity" Value="1"/>
-                                                    <Setter Property="Foreground" Value="{DynamicResource Brush_Accent}"/>
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
+                    <!-- <Button Grid.Row="2" Command="{Binding WorkflowVM.CancelSelectionCommand}" Content="Cancel" 
+                            Style="{StaticResource ModernCardButtonStyle}" 
+                            VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,48,0,0" Padding="32,8"/> -->
                 </Grid>
             </Border>
         </Border>

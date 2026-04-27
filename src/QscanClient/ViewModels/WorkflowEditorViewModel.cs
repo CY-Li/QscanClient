@@ -20,10 +20,28 @@ public partial class WorkflowEditorViewModel : ObservableObject
     private Workflow? _editingWorkflow;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsSmbDestination))]
+    [NotifyPropertyChangedFor(nameof(IsFtpDestination))]
+    [NotifyPropertyChangedFor(nameof(IsNotFtpDestination))]
+    [NotifyPropertyChangedFor(nameof(BrowseButtonText))]
     private WorkflowDestinationType _destinationType;
+
+    public bool IsSmbDestination => DestinationType == WorkflowDestinationType.SMB;
+    public bool IsFtpDestination => DestinationType == WorkflowDestinationType.FTP;
+    public bool IsNotFtpDestination => DestinationType != WorkflowDestinationType.FTP;
+    public string BrowseButtonText => IsSmbDestination ? "Search" : "Browse...";
 
     [ObservableProperty]
     private bool _isNewWorkflow;
+
+    [ObservableProperty]
+    private bool _isPasswordVisible;
+
+    [RelayCommand]
+    private void TogglePasswordVisibility()
+    {
+        IsPasswordVisible = !IsPasswordVisible;
+    }
 
     public WorkflowEditorViewModel(MainViewModel mainVM)
     {
@@ -37,6 +55,7 @@ public partial class WorkflowEditorViewModel : ObservableObject
         EditingWorkflow = new Workflow 
         { 
             Name = "New Workflow",
+            DestinationType = type.ToString(),
             IsNASDestination = type != WorkflowDestinationType.LocalPC,
             NamingFormat = "{YYYY}{MM}{DD}_Scan"
         };
@@ -47,11 +66,19 @@ public partial class WorkflowEditorViewModel : ObservableObject
         IsNewWorkflow = false;
         EditingWorkflow = workflow; // In a real app, we'd clone this
         
-        // Determine type based on properties (simplified for now)
-        if (workflow.IsNASDestination)
+        // Determine type based on model property
+        if (Enum.TryParse<WorkflowDestinationType>(workflow.DestinationType, out var result))
+        {
+            DestinationType = result;
+        }
+        else if (workflow.IsNASDestination)
+        {
             DestinationType = WorkflowDestinationType.SMB;
+        }
         else
+        {
             DestinationType = WorkflowDestinationType.LocalPC;
+        }
     }
 
     [RelayCommand]
@@ -65,6 +92,18 @@ public partial class WorkflowEditorViewModel : ObservableObject
         }
         
         _mainVM.Navigate("Workflow");
+    }
+
+    [RelayCommand]
+    private void SearchDestination()
+    {
+        // TODO: Implement Network Discovery Modal
+    }
+
+    [RelayCommand]
+    private void TestConnection()
+    {
+        // TODO: Implement Connection Testing Logic
     }
 
     [RelayCommand]

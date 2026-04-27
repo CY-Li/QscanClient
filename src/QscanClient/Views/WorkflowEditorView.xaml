@@ -7,219 +7,44 @@
              xmlns:converters="clr-namespace:QscanClient.Converters"
 
              mc:Ignorable="d" 
-             d:DesignHeight="720" d:DesignWidth="1120">
+             d:DesignHeight="800" d:DesignWidth="1200"
+             Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <converters:EnumValueToBooleanConverter x:Key="EnumValueToBooleanConverter"/>
         
-        <!-- Premium Segmented Control (Pill Style) -->
-        <Style x:Key="SegmentedRadioButtonStyle" TargetType="RadioButton">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource Brush_Border_Subtle}"/>
-            <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Secondary}"/>
-            <Setter Property="Padding" Value="24,10"/>
-            <Setter Property="MinWidth" Value="90"/>
+        <!-- Visual Dashboard Tile Style -->
+        <Style x:Key="VisualTileRadioButtonStyle" TargetType="RadioButton">
+            <Setter Property="Background" Value="{DynamicResource Brush_Elevation_Card}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Padding" Value="16"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FontSize" Value="13"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
-                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="20" Margin="2">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="16" Margin="4" Padding="{TemplateBinding Padding}" Effect="{StaticResource StandardShadow}">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="{DynamicResource Brush_Accent_Gradient}"/>
-                                <Setter TargetName="border" Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="FontWeight" Value="SemiBold"/>
-                                <Setter TargetName="border" Property="Effect" Value="{DynamicResource WarmGlow}"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource Brush_Accent}"/>
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource Brush_Accent_Transparent}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource Brush_Accent}"/>
+                                <Setter TargetName="border" Property="Opacity" Value="0.9"/>
                             </Trigger>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
                                     <Condition Property="IsMouseOver" Value="True"/>
-                                    <Condition Property="IsChecked" Value="False"/>
+                                    <Condition Property="IsChecked" Value="True"/>
                                 </MultiTrigger.Conditions>
-                                <Setter TargetName="border" Property="Background" Value="{DynamicResource Brush_Sidebar_Hover}"/>
-                                <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Primary}"/>
-                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource Brush_Accent}"/>
+                                <Setter TargetName="border" Property="Opacity" Value="1"/>
                             </MultiTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
-
-        <!-- Standard Input Style -->
-        <Style x:Key="ModernInputStyle" TargetType="Control">
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="12,12"/>
-            <Setter Property="Background" Value="{DynamicResource Brush_Background_Base}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource Brush_Border_Subtle}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-
-        <Style TargetType="TextBox" BasedOn="{StaticResource ModernInputStyle}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TextBox">
-                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8">
-                            <ScrollViewer x:Name="PART_ContentHost" Margin="4,0" VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsFocused" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource Brush_Accent}"/>
-                                <Setter TargetName="border" Property="Effect" Value="{DynamicResource WarmGlow}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Premium CheckBox Style -->
-        <Style TargetType="CheckBox">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Primary}"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="CheckBox">
-                        <StackPanel Orientation="Horizontal" Background="Transparent">
-                            <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                <Border x:Name="box" BorderBrush="{DynamicResource Brush_Border_Subtle}" BorderThickness="2" CornerRadius="5" Background="Transparent"/>
-                                <Path x:Name="check" Data="M3,7 L7,11 L13,3" StrokeThickness="2.5" Stroke="White" Visibility="Collapsed" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Height="10" Width="10" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Grid>
-                            <ContentPresenter VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="box" Property="Background" Value="{DynamicResource Brush_Accent_Gradient}"/>
-                                <Setter TargetName="box" Property="BorderThickness" Value="0"/>
-                                <Setter TargetName="check" Property="Visibility" Value="Visible"/>
-                                <Setter TargetName="box" Property="Effect" Value="{DynamicResource WarmGlow}"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="box" Property="BorderBrush" Value="{DynamicResource Brush_Accent}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Modern RadioButton Style (Circular) -->
-        <Style x:Key="ModernRadioButtonStyle" TargetType="RadioButton">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Primary}"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RadioButton">
-                        <StackPanel Orientation="Horizontal" Background="Transparent">
-                            <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                <Ellipse x:Name="outer" Stroke="{DynamicResource Brush_Border_Subtle}" StrokeThickness="2" Fill="Transparent"/>
-                                <Ellipse x:Name="inner" Fill="{DynamicResource Brush_Accent}" Width="10" Height="10" Visibility="Collapsed"/>
-                            </Grid>
-                            <ContentPresenter VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="outer" Property="Stroke" Value="{DynamicResource Brush_Accent}"/>
-                                <Setter TargetName="inner" Property="Visibility" Value="Visible"/>
-                                <Setter TargetName="outer" Property="Effect" Value="{DynamicResource WarmGlow}"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="outer" Property="Stroke" Value="{DynamicResource Brush_Accent}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Premium ComboBox Style -->
-        <Style TargetType="{x:Type ComboBox}">
-            <Setter Property="Height" Value="48"/>
-            <Setter Property="Background" Value="{DynamicResource Brush_Background_Base}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource Brush_Border_Subtle}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="16,0,12,0"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ComboBox}">
-                        <Grid>
-                            <ToggleButton x:Name="ToggleButton" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Grid.ColumnSpan="2">
-                                <ToggleButton.Template>
-                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
-                                        <Border x:Name="border" CornerRadius="10" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="40"/>
-                                                </Grid.ColumnDefinitions>
-                                                <Path x:Name="Arrow" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="Transparent" Stroke="{DynamicResource Brush_Text_Secondary}" StrokeThickness="2" Data="M0,0 L5,5 L10,0"/>
-                                            </Grid>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource Brush_Accent}"/>
-                                            </Trigger>
-                                            <Trigger Property="IsChecked" Value="True">
-                                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource Brush_Accent}"/>
-                                                <Setter TargetName="border" Property="Effect" Value="{DynamicResource WarmGlow}"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </ToggleButton.Template>
-                            </ToggleButton>
-                            <ContentPresenter Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                            <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
-                                <Border x:Name="DropDownBorder" Background="{DynamicResource Brush_Elevation_Card}" BorderBrush="{DynamicResource Brush_Border_Subtle}" BorderThickness="1" CornerRadius="12" Margin="0,4,0,12" Effect="{DynamicResource StandardShadow}" MinWidth="{Binding ActualWidth, ElementName=ToggleButton}">
-                                    <ScrollViewer MaxHeight="300" SnapsToDevicePixels="True">
-                                        <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/>
-                                    </ScrollViewer>
-                                </Border>
-                            </Popup>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="{x:Type ComboBoxItem}">
-            <Setter Property="Padding" Value="16,12"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8" Margin="4,2">
-                            <ContentPresenter Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource Brush_Sidebar_Hover}"/>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource Brush_Sidebar_Selected}"/>
-                                <Setter Property="Foreground" Value="{DynamicResource Brush_Accent}"/>
-                                <Setter Property="FontWeight" Value="SemiBold"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Tooltip Style -->
-        <Style TargetType="ToolTip">
-            <Setter Property="Background" Value="{DynamicResource Brush_Elevation_Card}"/>
-            <Setter Property="Foreground" Value="{DynamicResource Brush_Text_Primary}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource Brush_Border_Subtle}"/>
-            <Setter Property="Padding" Value="10,6"/>
-            <Setter Property="Placement" Value="Top"/>
         </Style>
     </UserControl.Resources>
 
@@ -230,26 +55,22 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Grid Grid.Row="0" Margin="0,0,0,12">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <Button Command="{Binding WorkflowEditorVM.CancelCommand}" Background="Transparent" BorderThickness="0" Padding="8" Margin="0,0,16,0" Cursor="Hand">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="bd" Background="Transparent" CornerRadius="12">
-                                <Path x:Name="icon" Data="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" Fill="{DynamicResource Brush_Text_Primary}" Width="24" Height="24" Stretch="Uniform"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="bd" Property="Background" Value="{DynamicResource Brush_Sidebar_Hover}"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
+        <Grid Grid.Row="0" Margin="0,0,0,32">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Button Command="{Binding WorkflowEditorVM.CancelCommand}" 
+                        Style="{StaticResource HeaderNeutralActionButtonStyle}" Margin="0,0,16,0" VerticalAlignment="Center" ToolTip="Go back">
+                    <Path Data="{StaticResource Icon_Back}" 
+                          Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="20" Height="20" Stretch="Uniform"/>
                 </Button>
-                <StackPanel>
-                    <TextBlock FontSize="32" FontWeight="Bold" Foreground="{DynamicResource Brush_Text_Primary}">
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock FontSize="24" FontWeight="Bold" Foreground="{DynamicResource Brush_Text_Primary}">
                         <TextBlock.Style>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                            <Style TargetType="TextBlock">
                                 <Setter Property="Text" Value="Edit Workflow"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding WorkflowEditorVM.IsNewWorkflow}" Value="True">
@@ -259,174 +80,343 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <TextBlock Text="Set up your automated scanning preferences" FontSize="14" Foreground="{DynamicResource Brush_Text_Secondary}" Opacity="0.6" Margin="0,4,0,0"/>
+                    <TextBlock Text="Set up your automated scanning preferences" FontSize="13" Foreground="{DynamicResource Brush_Text_Secondary}"/>
                 </StackPanel>
             </StackPanel>
+
+            <Button Grid.Column="1" Command="{Binding WorkflowEditorVM.SaveCommand}" 
+                    Style="{StaticResource HeaderPrimaryActionButtonStyle}" 
+                    VerticalAlignment="Center" ToolTip="Save changes">
+                <Path Data="{StaticResource Icon_Save}" 
+                      Fill="White" Width="20" Height="20" Stretch="Uniform"/>
+            </Button>
         </Grid>
 
-        <!-- Content -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,-10,0">
-            <StackPanel Margin="0,0,50,0" MaxWidth="900" HorizontalAlignment="Left">
-                
-                <!-- Destination Info Badge -->
-                <Border Background="{DynamicResource Brush_Sidebar_Selected}" CornerRadius="16" Padding="20,12" Margin="0,0,0,24" HorizontalAlignment="Left" BorderThickness="1" BorderBrush="{DynamicResource Brush_Accent}">
-                    <StackPanel Orientation="Horizontal">
-                        <Viewbox Width="20" Height="20" Margin="0,0,12,0">
-                            <Path Data="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" Fill="{DynamicResource Brush_Accent}"/>
-                        </Viewbox>
-                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource Brush_Accent}" VerticalAlignment="Center">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding WorkflowEditorVM.DestinationType}" Value="LocalPC">
-                                            <Setter Property="Text" Value="Scanning to Local PC Folder"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding WorkflowEditorVM.DestinationType}" Value="SMB">
-                                            <Setter Property="Text" Value="Scanning to NAS / SMB Share"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding WorkflowEditorVM.DestinationType}" Value="FTP">
-                                            <Setter Property="Text" Value="Scanning to FTP Server"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </StackPanel>
-                </Border>
+        <!-- Main Form Area -->
+        <ScrollViewer x:Name="MainScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,-24,-24" Padding="0,0,24,24">
+            <Grid Margin="0,0,0,40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
 
-                <!-- Section: General -->
-                <TextBlock Text="1. GENERAL" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource Brush_Accent}" Margin="4,0,0,12" Opacity="0.8"/>
-                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="20" Padding="32" Margin="0,0,0,32" Effect="{DynamicResource StandardShadow}">
-                    <StackPanel>
-                        <TextBlock Text="Workflow Name" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="12" Margin="0,0,0,12"/>
-                        <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.Name, UpdateSourceTrigger=PropertyChanged}" Padding="16" FontSize="16" FontWeight="SemiBold"/>
-                        <TextBlock Text="Give this workflow a clear name for quick identification" FontSize="11" Foreground="{DynamicResource Brush_Text_Secondary}" Opacity="0.5" Margin="4,10,0,0"/>
+                <!-- ================= LEFT COLUMN: IDENTIFICATION & DESTINATION ================= -->
+                <StackPanel Grid.Column="0" Margin="0,0,40,0">
+                    <TextBlock Text="Workflow Name" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
+                    <StackPanel Margin="0,0,0,0">
+                        <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
+                            <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.Name, UpdateSourceTrigger=PropertyChanged}" Padding="20,0" VerticalContentAlignment="Center" FontSize="16" FontWeight="Bold" Background="Transparent" BorderThickness="0"/>
+                        </Border>
                     </StackPanel>
-                </Border>
 
-                <!-- Section: Scan Settings -->
-                <TextBlock Text="2. SCAN SETTINGS" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource Brush_Accent}" Margin="4,0,0,12" Opacity="0.8"/>
-                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="20" Padding="32" Margin="0,0,0,32" Effect="{DynamicResource StandardShadow}">
+                    <StackPanel Visibility="{Binding WorkflowEditorVM.IsNotFtpDestination, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock Text="Save to Destination" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,24,0,8"/>
+                        <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" Padding="8,4" MinHeight="64" Effect="{StaticResource StandardShadow}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="0" Text="{Binding WorkflowEditorVM.EditingWorkflow.TargetPath, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Padding="12,0" FontSize="14"/>
+                                <Button Grid.Column="1" Content="{Binding WorkflowEditorVM.BrowseButtonText}" Command="{Binding WorkflowEditorVM.SearchDestinationCommand}" Padding="24,0" Style="{StaticResource ModernCardButtonStyle}" 
+                                        FontWeight="Bold" Height="40" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- SMB Credentials (Conditional) -->
+                    <StackPanel Visibility="{Binding WorkflowEditorVM.IsSmbDestination, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid Margin="0,24,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="User" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
+                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
+                                    <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.SmbUser, UpdateSourceTrigger=PropertyChanged}" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0"/>
+                                </Border>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Password" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
+                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
+                                    <Grid>
+                                        <!-- Hidden Password (PasswordBox) -->
+                                        <PasswordBox local:PasswordBoxHelper.Attach="True" 
+                                                     local:PasswordBoxHelper.Password="{Binding WorkflowEditorVM.EditingWorkflow.SmbPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                     Padding="20,0,50,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0">
+                                            <PasswordBox.Style>
+                                                <Style TargetType="PasswordBox">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding WorkflowEditorVM.IsPasswordVisible}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </PasswordBox.Style>
+                                        </PasswordBox>
+                                        <!-- Shown Password (TextBox) -->
+                                        <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.SmbPassword, UpdateSourceTrigger=PropertyChanged}"
+                                                 Padding="20,0,50,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0">
+                                            <TextBox.Style>
+                                                <Style TargetType="TextBox">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding WorkflowEditorVM.IsPasswordVisible}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
+                                        </TextBox>
+                                        <!-- Toggle Button -->
+                                        <Button Command="{Binding WorkflowEditorVM.TogglePasswordVisibilityCommand}" 
+                                                Style="{StaticResource IconButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0">
+                                            <Path Width="22" Height="22" Stretch="Uniform" Fill="{DynamicResource Brush_Text_Primary}">
+                                                <Path.Style>
+                                                    <Style TargetType="Path">
+                                                        <Setter Property="Data" Value="{StaticResource Icon_Eye_Off}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding WorkflowEditorVM.IsPasswordVisible}" Value="True">
+                                                                <Setter Property="Data" Value="{StaticResource Icon_Eye}"/>
+                                                                <Setter Property="Fill" Value="{DynamicResource Brush_Accent}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Path.Style>
+                                            </Path>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- FTP/SFTP Settings (Conditional) -->
+                    <StackPanel Visibility="{Binding WorkflowEditorVM.IsFtpDestination, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid Margin="0,24,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Server address" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
+                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
+                                    <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.FtpServer, UpdateSourceTrigger=PropertyChanged}" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0"/>
+                                </Border>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Port" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
+                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
+                                    <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.FtpPort, UpdateSourceTrigger=PropertyChanged}" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0"/>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+
+                        <TextBlock Text="Folder" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,24,0,8"/>
+                        <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
+                            <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.FtpRemoteFolder, UpdateSourceTrigger=PropertyChanged}" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0"/>
+                        </Border>
+
+                        <Grid Margin="0,24,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Protocol" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
+                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
+                                    <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.FtpProtocol}" SelectedValuePath="Content" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0">
+                                        <ComboBoxItem Content="FTP"/>
+                                        <ComboBoxItem Content="SFTP"/>
+                                    </ComboBox>
+                                </Border>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Encryption" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
+                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
+                                    <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.FtpEncryption}" SelectedValuePath="Content" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0">
+                                        <ComboBoxItem Content="None"/>
+                                        <ComboBoxItem Content="SSL/TLS"/>
+                                        <ComboBoxItem Content="Implicit"/>
+                                    </ComboBox>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+
+                        <TextBlock Text="Authentication Type" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,24,0,8"/>
+                        <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
+                            <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.FtpAuthType}" SelectedValuePath="Content" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0">
+                                <ComboBoxItem Content="Normal"/>
+                                <ComboBoxItem Content="Anonymous"/>
+                            </ComboBox>
+                        </Border>
+
+                        <Grid Margin="0,24,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Login" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
+                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
+                                    <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.FtpLogin, UpdateSourceTrigger=PropertyChanged}" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0"/>
+                                </Border>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Password" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
+                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
+                                    <Grid>
+                                        <!-- Hidden Password (PasswordBox) -->
+                                        <PasswordBox local:PasswordBoxHelper.Attach="True" 
+                                                     local:PasswordBoxHelper.Password="{Binding WorkflowEditorVM.EditingWorkflow.FtpPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                     Padding="20,0,50,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0">
+                                            <PasswordBox.Style>
+                                                <Style TargetType="PasswordBox">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding WorkflowEditorVM.IsPasswordVisible}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </PasswordBox.Style>
+                                        </PasswordBox>
+                                        <!-- Shown Password (TextBox) -->
+                                        <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.FtpPassword, UpdateSourceTrigger=PropertyChanged}"
+                                                 Padding="20,0,50,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0">
+                                            <TextBox.Style>
+                                                <Style TargetType="TextBox">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding WorkflowEditorVM.IsPasswordVisible}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
+                                        </TextBox>
+                                        <!-- Toggle Button -->
+                                        <Button Command="{Binding WorkflowEditorVM.TogglePasswordVisibilityCommand}" 
+                                                Style="{StaticResource IconButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0">
+                                            <Path Width="22" Height="22" Stretch="Uniform" Fill="{DynamicResource Brush_Text_Primary}">
+                                                <Path.Style>
+                                                    <Style TargetType="Path">
+                                                        <Setter Property="Data" Value="{StaticResource Icon_Eye_Off}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding WorkflowEditorVM.IsPasswordVisible}" Value="True">
+                                                                <Setter Property="Data" Value="{StaticResource Icon_Eye}"/>
+                                                                <Setter Property="Fill" Value="{DynamicResource Brush_Accent}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Path.Style>
+                                            </Path>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- ================= RIGHT COLUMN: SCAN CONFIGURATION ================= -->
+                <StackPanel Grid.Column="1">
+                    <!-- File Format -->
+                    <TextBlock Text="File Format" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
+                    <UniformGrid Columns="2" Margin="-4,0,-4,0">
+                        <RadioButton Style="{StaticResource VisualTileRadioButtonStyle}" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.FileFormat, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=PDF}">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,4">
+                                <TextBlock Text="PDF" FontWeight="Heavy" FontSize="20" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Primary}"/>
+                                <TextBlock Text="Document" FontSize="11" Opacity="0.5" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Secondary}" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Style="{StaticResource VisualTileRadioButtonStyle}" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.FileFormat, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=JPG}">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,4">
+                                <TextBlock Text="JPG" FontWeight="Heavy" FontSize="20" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Primary}"/>
+                                <TextBlock Text="Image format" FontSize="11" Opacity="0.5" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Secondary}" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </UniformGrid>
+
+                    <!-- Color Mode -->
+                    <TextBlock Text="Color Mode" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,24,0,8"/>
+                    <UniformGrid Columns="3" Margin="-4,0,-4,0">
+                        <RadioButton Style="{StaticResource VisualTileRadioButtonStyle}" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.ScanMode, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=Color}">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,8">
+                                <Path Data="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" Fill="{StaticResource Brush_Rainbow}" Width="28" Height="28" Stretch="Uniform" Margin="0,0,0,12"/>
+                                <TextBlock Text="Color" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Primary}"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Style="{StaticResource VisualTileRadioButtonStyle}" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.ScanMode, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=Grayscale}">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,8">
+                                <Grid Width="28" Height="28" Margin="0,0,0,12" Opacity="0.6">
+                                    <Ellipse Fill="{DynamicResource Brush_Text_Secondary}"/>
+                                    <Ellipse Stroke="White" StrokeThickness="2"/>
+                                </Grid>
+                                <TextBlock Text="Grayscale" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Primary}"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Style="{StaticResource VisualTileRadioButtonStyle}" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.ScanMode, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=B&amp;W}">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,8">
+                                <Grid Width="28" Height="28" Margin="0,0,0,12" Opacity="0.5">
+                                    <Ellipse Fill="Black"/>
+                                    <Ellipse Fill="White" Width="14" Height="28" HorizontalAlignment="Left"/>
+                                    <Ellipse Stroke="Black" StrokeThickness="2"/>
+                                </Grid>
+                                <TextBlock Text="B &amp; W" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" Foreground="{DynamicResource Brush_Text_Primary}"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </UniformGrid>
+
+                    <!-- Sides -->
+                    <TextBlock Text="Sides" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,24,0,8"/>
+                    <UniformGrid Columns="2" Margin="-4,0,-4,0">
+                        <RadioButton Style="{StaticResource VisualTileRadioButtonStyle}" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.Sides, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=1 Sided}">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,8">
+                                <Path Data="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M13,9V3.5L18.5,9H13Z" Fill="{DynamicResource Brush_Text_Primary}" Width="24" Height="24" Stretch="Uniform" Margin="0,0,12,0" Opacity="0.7"/>
+                                <TextBlock Text="1 Sided" FontWeight="Bold" FontSize="15" VerticalAlignment="Center" Foreground="{DynamicResource Brush_Text_Primary}"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Style="{StaticResource VisualTileRadioButtonStyle}" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.Sides, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=2 Sided}">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,8">
+                                <Path Data="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M13,9V3.5L18.5,9H13M17,14H7V12H17V14M14,18H7V16H14V18Z" Fill="{DynamicResource Brush_Text_Primary}" Width="24" Height="24" Stretch="Uniform" Margin="0,0,12,0" Opacity="0.7"/>
+                                <TextBlock Text="2 Sided (Duplex)" FontWeight="Bold" FontSize="15" VerticalAlignment="Center" Foreground="{DynamicResource Brush_Text_Primary}"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </UniformGrid>
+
+                    <!-- Paper Size & Resolution -->
                     <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-
-                        <!-- Scan Mode -->
-                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,24,24">
-                            <TextBlock Text="Scan Mode" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="12" Margin="0,0,0,8"/>
-                            <StackPanel Orientation="Horizontal">
-                                <RadioButton Content="Color" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.ScanMode, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=Color}" Style="{StaticResource SegmentedRadioButtonStyle}"/>
-                                <RadioButton Content="Grey" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.ScanMode, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=Grey}" Style="{StaticResource SegmentedRadioButtonStyle}"/>
-                                <RadioButton Content="B &amp; W" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.ScanMode, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=Black &amp; White}" Style="{StaticResource SegmentedRadioButtonStyle}"/>
-                            </StackPanel>
-                        </StackPanel>
-
-                        <!-- Sides -->
-                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,24">
-                            <TextBlock Text="Sides" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="12" Margin="0,0,0,8"/>
-                            <StackPanel Orientation="Horizontal">
-                                <RadioButton Content="One sided" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.Sides, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=One sided}" Style="{StaticResource SegmentedRadioButtonStyle}"/>
-                                <RadioButton Content="Two sided" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.Sides, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=Two sided}" Style="{StaticResource SegmentedRadioButtonStyle}"/>
-                            </StackPanel>
-                        </StackPanel>
-
-                        <!-- Paper Size -->
-                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,24,0">
-                            <TextBlock Text="Paper Size" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="12" Margin="0,0,0,12"/>
-                            <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.PaperSize}" SelectedValuePath="Content">
+                        <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                            <TextBlock Text="Paper Size" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,24,0,8"/>
+                            <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.PaperSize}" SelectedValuePath="Content" Padding="16,12" FontSize="15" FontWeight="SemiBold">
                                 <ComboBoxItem Content="Auto"/>
                                 <ComboBoxItem Content="A3"/>
                                 <ComboBoxItem Content="A4"/>
                                 <ComboBoxItem Content="A5"/>
                                 <ComboBoxItem Content="Letter"/>
-                                <ComboBoxItem Content="Long paper"/>
+                                <ComboBoxItem Content="Long Paper"/>
                             </ComboBox>
                         </StackPanel>
-
-                        <!-- Resolution -->
-                        <StackPanel Grid.Row="1" Grid.Column="1">
-                            <TextBlock Text="Resolution" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="12" Margin="0,0,0,8"/>
-                            <StackPanel Orientation="Horizontal">
-                                <RadioButton Content="200 dpi" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.Resolution, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=200dpi}" Style="{StaticResource SegmentedRadioButtonStyle}" ToolTip="Good"/>
-                                <RadioButton Content="300 dpi" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.Resolution, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=300dpi}" Style="{StaticResource SegmentedRadioButtonStyle}" ToolTip="Better"/>
-                                <RadioButton Content="600 dpi" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.Resolution, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=600dpi}" Style="{StaticResource SegmentedRadioButtonStyle}" ToolTip="Excellent"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-
-                <!-- Section: Processing -->
-                <TextBlock Text="3. PROCESSING" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource Brush_Accent}" Margin="4,0,0,12" Opacity="0.8"/>
-                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="20" Padding="32" Margin="0,0,0,32" Effect="{DynamicResource StandardShadow}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <StackPanel Grid.Column="0" Margin="0,0,24,0">
-                            <CheckBox Content="Enable Intelligent OCR" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.EnableOCR}" Margin="0,0,0,16" FontSize="14" FontWeight="SemiBold"/>
-                            <TextBlock Text="Output Format" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="12" Margin="0,0,0,8"/>
-                             <StackPanel Orientation="Horizontal">
-                                 <RadioButton Content="PDF" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.FileFormat, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=PDF}" Margin="0,0,32,0" Style="{StaticResource ModernRadioButtonStyle}"/>
-                                 <RadioButton Content="JPG" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.FileFormat, Converter={StaticResource EnumValueToBooleanConverter}, ConverterParameter=JPG}" Style="{StaticResource ModernRadioButtonStyle}"/>
-                             </StackPanel>
-                        </StackPanel>
-
                         <StackPanel Grid.Column="1">
-                            <CheckBox Content="AI Smart Naming" IsChecked="{Binding WorkflowEditorVM.EditingWorkflow.EnableAISmartNaming}" Margin="0,0,0,16" FontSize="14" FontWeight="SemiBold"/>
-                            <StackPanel Visibility="{Binding WorkflowEditorVM.EditingWorkflow.EnableAISmartNaming, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <TextBlock Text="Naming Pattern" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="12" Margin="0,0,0,8"/>
-                                <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.NamingFormat, UpdateSourceTrigger=PropertyChanged}" Padding="10,8" BorderThickness="1" Background="{DynamicResource Brush_Background_Base}"/>
-                                <TextBlock Text="Example: {YYYY}{MM}{DD}_Scan" FontSize="10" Foreground="{DynamicResource Brush_Text_Secondary}" Opacity="0.6" Margin="4,4,0,0"/>
-                            </StackPanel>
+                            <TextBlock Text="Resolution" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,24,0,8"/>
+                            <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.Resolution}" SelectedValuePath="Content" Padding="16,12" FontSize="15" FontWeight="SemiBold">
+                                <ComboBoxItem Content="200dpi"/>
+                                <ComboBoxItem Content="300dpi"/>
+                                <ComboBoxItem Content="600dpi"/>
+                            </ComboBox>
                         </StackPanel>
                     </Grid>
-                </Border>
-
-                <!-- Section: Destination -->
-                <TextBlock Text="4. DESTINATION" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource Brush_Accent}" Margin="4,0,0,12" Opacity="0.8"/>
-                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="20" Padding="32" Margin="0,0,0,48" Effect="{DynamicResource StandardShadow}">
-                    <StackPanel>
-                        <TextBlock Text="Save to" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="12" Margin="0,0,0,12"/>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBox Grid.Column="0" Text="{Binding WorkflowEditorVM.EditingWorkflow.TargetPath, UpdateSourceTrigger=PropertyChanged}" Padding="16" FontWeight="SemiBold" VerticalContentAlignment="Center"/>
-                            <Button Grid.Column="1" Content="Browse..." Margin="12,0,0,0" Padding="24,0" Height="50" Style="{StaticResource ModernCardButtonStyle}" BorderBrush="{DynamicResource Brush_Accent}" Foreground="{DynamicResource Brush_Accent}"/>
-                        </Grid>
-                        <TextBlock Text="Select the folder where your scans will be stored" FontSize="11" Foreground="{DynamicResource Brush_Text_Secondary}" Opacity="0.5" Margin="4,12,0,0"/>
-                    </StackPanel>
-                </Border>
-
-                <!-- Actions -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,80">
-                    <Button Command="{Binding WorkflowEditorVM.CancelCommand}" Content="Discard changes" Margin="0,0,24,0" BorderThickness="1" Height="48" Padding="24,0" Style="{StaticResource ModernCardButtonStyle}" FontSize="13"/>
-                    <Button Command="{Binding WorkflowEditorVM.SaveCommand}" Content="Save workflow" Background="{DynamicResource Brush_Accent_Gradient}" Foreground="White" BorderThickness="0" Padding="32,0" FontWeight="Bold" FontSize="14" Height="48">
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="border" Property="Effect" Value="{DynamicResource WarmGlow}"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
                 </StackPanel>
-
-            </StackPanel>
+            </Grid>
         </ScrollViewer>
+
+
     </Grid>
 </UserControl>

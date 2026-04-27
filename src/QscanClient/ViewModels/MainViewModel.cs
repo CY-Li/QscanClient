@@ -43,7 +43,7 @@ public partial class MainViewModel : ObservableObject
     public ObservableCollection<ScanBatch> Batches { get; } = new();
 
     [ObservableProperty]
-    private bool _isDarkTheme = true;
+    private bool _isDarkTheme = false;
 
     [ObservableProperty]
     private int _totalPagesToday;

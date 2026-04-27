@@ -27,7 +27,45 @@ public partial class Workflow : ObservableObject
     private string _namingFormat = "{YYYYMMDD}_{Subject}";
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DisplayTargetPath))]
     private string _targetPath = string.Empty;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DisplayTargetPath))]
+    private string _destinationType = "LocalPC"; // LocalPC, SMB, FTP
+
+    [ObservableProperty]
+    private string _smbUser = string.Empty;
+
+    [ObservableProperty]
+    private string _smbPassword = string.Empty;
+
+    // FTP Settings
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DisplayTargetPath))]
+    private string _ftpServer = string.Empty;
+
+    [ObservableProperty]
+    private string _ftpPort = "21";
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DisplayTargetPath))]
+    private string _ftpRemoteFolder = string.Empty;
+
+    [ObservableProperty]
+    private string _ftpProtocol = "FTP"; // FTP, SFTP
+
+    [ObservableProperty]
+    private string _ftpEncryption = "None"; // None, SSL/TLS, Implicit
+
+    [ObservableProperty]
+    private string _ftpAuthType = "Normal"; // Normal, Anonymous
+
+    [ObservableProperty]
+    private string _ftpLogin = string.Empty;
+
+    [ObservableProperty]
+    private string _ftpPassword = string.Empty;
 
     [ObservableProperty]
     private bool _isNASDestination = false;
@@ -46,4 +84,19 @@ public partial class Workflow : ObservableObject
     private string _sides = "One sided"; // One sided, Two sided
 
     public string DisplaySummary => $"{FileFormat} {(EnableOCR ? "+ OCR" : "")} {(EnableAISmartNaming ? "+ AI" : "")}";
+
+    public string DisplayTargetPath
+    {
+        get
+        {
+            if (DestinationType == "FTP")
+            {
+                var server = FtpServer?.TrimEnd('/');
+                var folder = FtpRemoteFolder?.TrimStart('/');
+                if (string.IsNullOrEmpty(folder)) return server ?? string.Empty;
+                return $"{server}/{folder}";
+            }
+            return TargetPath;
+        }
+    }
 }

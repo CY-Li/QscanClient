@@ -6,11 +6,14 @@
         xmlns:local="clr-namespace:QscanClient"
         xmlns:vm="clr-namespace:QscanClient.ViewModels"
         mc:Ignorable="d"
-        Title="Qscan" Height="720" Width="1120"
+        Title="Qscan" Height="720" Width="1200"
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
         Foreground="White"
-        FontFamily="Segoe UI Variable Display, Segoe UI, sans-serif">
+        UseLayoutRounding="True" SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        FontFamily="Segoe UI, sans-serif">
 
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="1" 
@@ -196,8 +199,8 @@
                 </Grid>
             </Border>
 
-            <!-- Content: Lighter, Transparent BG for Acrylic feel -->
-            <Border Grid.Column="1" Background="{DynamicResource Brush_Background_Surface}" Opacity="0.8" CornerRadius="10,0,0,0" BorderThickness="0" ClipToBounds="False">
+            <!-- Content: Solid Background to avoid component opacity bleeding -->
+            <Border Grid.Column="1" Background="{DynamicResource Brush_Background_Surface}" CornerRadius="10,0,0,0" BorderThickness="0" ClipToBounds="False">
                 <Border.Effect>
                     <DropShadowEffect Color="Black" BlurRadius="30" ShadowDepth="0" Opacity="0.5"/>
                 </Border.Effect>
