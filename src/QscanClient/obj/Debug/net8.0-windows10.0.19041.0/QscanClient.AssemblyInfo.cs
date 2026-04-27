@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("QscanClient")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6d343b3ddf71e9622d58be47b2469692245fa978")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dbb6ae50217b67730a3ce028ba621bc65fde76f2")]
 [assembly: System.Reflection.AssemblyProductAttribute("QscanClient")]
 [assembly: System.Reflection.AssemblyTitleAttribute("QscanClient")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
