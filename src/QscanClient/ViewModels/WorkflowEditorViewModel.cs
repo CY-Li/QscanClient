@@ -95,17 +95,6 @@ public partial class WorkflowEditorViewModel : ObservableObject
         _mainVM.Navigate("Workflow");
     }
 
-    [RelayCommand]
-    private void SearchDestination()
-    {
-        // TODO: Implement Network Discovery Modal
-    }
-
-    [RelayCommand]
-    private void TestConnection()
-    {
-        // TODO: Implement Connection Testing Logic
-    }
 
     [RelayCommand]
     private void Cancel()

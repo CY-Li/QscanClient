@@ -28,12 +28,6 @@ public partial class WorkflowViewModel : ObservableObject
     {
         _mainViewModel = mainViewModel;
         Workflows.CollectionChanged += (s, e) => OnPropertyChanged(nameof(IsEmpty));
-        LoadMockWorkflows();
-    }
-
-    private void LoadMockWorkflows()
-    {
-        // Start with an empty list for production, or add different mocks if needed
     }
 
     [RelayCommand]

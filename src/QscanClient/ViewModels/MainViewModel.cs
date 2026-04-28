@@ -216,7 +216,6 @@ public partial class MainViewModel : ObservableObject
             if (!IsScanning) break;
             
             CurrentScanningPage = i;
-            CurrentScanningPage = i;
             
             // Simulate page transfer time
             await System.Threading.Tasks.Task.Delay(500); 
@@ -254,7 +253,6 @@ public partial class MainViewModel : ObservableObject
             
             Batches.Insert(0, newBatch); // Add to top of list
             SelectedBatch = newBatch; // Auto-select? Maybe just highlight.
-            IsScanning = false;
             IsScanning = false;
             
             // Auto-disconnect after scan as requested
@@ -430,32 +428,14 @@ public partial class MainViewModel : ObservableObject
         dict.Add(new ResourceDictionary { Source = newSource });
     }
 
-    /// <summary>
-    /// Placeholder for mDNS service that makes this PC discoverable by Q30.
-    /// </summary>
-    private void StartMdnsDiscovery()
-    {
-        // TODO: Implement DNS-SD advertisement (e.g., using Makaretu.Dns or similar)
-    }
-
-    /// <summary>
-    /// Placeholder for WebSocket server to receive scans from Q30.
-    /// </summary>
-    private void SetupWebSocketServer()
-    {
-        // TODO: Implement WebSocket server to listen for Q30 upload requests
-        // Once connected, call UpdateStatus(Q30ConnectionStatus.Connected);
-    }
 
     public void UpdateStatus(Q30ConnectionStatus status)
     {
         Q30Status = status;
         Q30StatusText = status switch
         {
-            Q30ConnectionStatus.Disconnected => "Searching for connection...",
-            Q30ConnectionStatus.Searching => "Searching for connection...",
-            Q30ConnectionStatus.Connected => "Plustek Q30 Connected",
-            Q30ConnectionStatus.WaitingForUpload => "Plustek Q30 Connected",
+            Q30ConnectionStatus.Disconnected or Q30ConnectionStatus.Searching => "Searching for connection...",
+            Q30ConnectionStatus.Connected or Q30ConnectionStatus.WaitingForUpload => "Plustek Q30 Connected",
             _ => "Unknown Status"
         };
     }
