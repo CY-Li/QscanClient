@@ -29,6 +29,13 @@ public partial class ScanBatch : ObservableObject
     [ObservableProperty]
     private int _imageCount;
 
+    [ObservableProperty]
+    private bool _isEditingTitle;
+
+    // Staging buffer – only committed to Title on confirm
+    [ObservableProperty]
+    private string _editingTitle = string.Empty;
+
     public ObservableCollection<string> ImagePaths { get; } = new();
 
     public string DateFormatted => Timestamp.ToString("MM/dd/yyyy");
@@ -44,6 +51,30 @@ public partial class ScanBatch : ObservableObject
     public void SelectImage(string path)
     {
         SelectedImagePath = path;
+    }
+
+    [RelayCommand]
+    private void ToggleEditTitle()
+    {
+        if (!IsEditingTitle)
+        {
+            // Enter edit mode: copy current title into staging buffer
+            EditingTitle = Title;
+            IsEditingTitle = true;
+        }
+        else
+        {
+            // Confirm: commit staging buffer → Title
+            Title = EditingTitle;
+            IsEditingTitle = false;
+        }
+    }
+
+    [RelayCommand]
+    private void CancelEditTitle()
+    {
+        // Discard changes
+        IsEditingTitle = false;
     }
 
     [RelayCommand]

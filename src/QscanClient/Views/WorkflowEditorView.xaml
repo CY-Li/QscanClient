@@ -48,14 +48,14 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid Margin="32,48,32,24">
+    <Grid Margin="12,48,32,24" ClipToBounds="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Grid Grid.Row="0" Margin="0,0,0,32">
+        <Grid Grid.Row="0" Margin="20,0,0,32">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -93,33 +93,33 @@
         </Grid>
 
         <!-- Main Form Area -->
-        <ScrollViewer x:Name="MainScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,-24,-24" Padding="0,0,24,24">
-            <Grid Margin="0,0,0,40">
+        <ScrollViewer x:Name="MainScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,-24,-24" Padding="0,0,24,24" ClipToBounds="False">
+            <Grid Margin="20,0,0,40" ClipToBounds="False">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5*"/>
                     <ColumnDefinition Width="4*"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- ================= LEFT COLUMN: IDENTIFICATION & DESTINATION ================= -->
-                <StackPanel Grid.Column="0" Margin="0,0,40,0">
+                <StackPanel Grid.Column="0" Margin="0,0,40,0" ClipToBounds="False">
                     <TextBlock Text="Workflow Name" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
                     <StackPanel Margin="0,0,0,0">
-                        <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
-                            <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.Name, UpdateSourceTrigger=PropertyChanged}" Padding="20,0" VerticalContentAlignment="Center" FontSize="16" FontWeight="Bold" Background="Transparent" BorderThickness="0"/>
-                        </Border>
+                        <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.Name, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{StaticResource PremiumTextBoxStyle}" FontSize="16" FontWeight="Bold"/>
                     </StackPanel>
 
                     <StackPanel Visibility="{Binding WorkflowEditorVM.IsNotFtpDestination, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <TextBlock Text="Save to Destination" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,24,0,8"/>
-                        <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" Padding="8,4" MinHeight="64" Effect="{StaticResource StandardShadow}">
+                        <Border Style="{StaticResource FieldBorderStyle}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBox Grid.Column="0" Text="{Binding WorkflowEditorVM.EditingWorkflow.TargetPath, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Padding="12,0" FontSize="14"/>
-                                <Button Grid.Column="1" Content="{Binding WorkflowEditorVM.BrowseButtonText}" Command="{Binding WorkflowEditorVM.SearchDestinationCommand}" Padding="24,0" Style="{StaticResource ModernCardButtonStyle}" 
-                                        FontWeight="Bold" Height="40" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                <TextBox Grid.Column="0" Text="{Binding WorkflowEditorVM.EditingWorkflow.TargetPath, UpdateSourceTrigger=PropertyChanged}" 
+                                         Style="{StaticResource SubfieldInputStyle}" FontSize="14"/>
+                                <Button Grid.Column="1" Content="{Binding WorkflowEditorVM.BrowseButtonText}" Command="{Binding WorkflowEditorVM.SearchDestinationCommand}" 
+                                        Style="{StaticResource ModernCardButtonStyle}" Margin="8,10" Padding="24,0" FontWeight="Bold" Height="44" VerticalAlignment="Center"/>
                             </Grid>
                         </Border>
                     </StackPanel>
@@ -133,20 +133,19 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" Margin="0,0,16,0">
                                 <TextBlock Text="User" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
-                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
-                                    <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.SmbUser, UpdateSourceTrigger=PropertyChanged}" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0"/>
-                                </Border>
+                                <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.SmbUser, UpdateSourceTrigger=PropertyChanged}" 
+                                         Style="{StaticResource PremiumTextBoxStyle}" FontSize="15"/>
                             </StackPanel>
                             <StackPanel Grid.Column="1">
                                 <TextBlock Text="Password" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
-                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
+                                <Border Style="{StaticResource FieldBorderStyle}">
                                     <Grid>
                                         <!-- Hidden Password (PasswordBox) -->
                                         <PasswordBox local:PasswordBoxHelper.Attach="True" 
                                                      local:PasswordBoxHelper.Password="{Binding WorkflowEditorVM.EditingWorkflow.SmbPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                     Padding="20,0,50,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0">
+                                                     FontSize="15">
                                             <PasswordBox.Style>
-                                                <Style TargetType="PasswordBox">
+                                                <Style TargetType="PasswordBox" BasedOn="{StaticResource SubfieldInputStyle}">
                                                     <Setter Property="Visibility" Value="Visible"/>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding WorkflowEditorVM.IsPasswordVisible}" Value="True">
@@ -158,9 +157,9 @@
                                         </PasswordBox>
                                         <!-- Shown Password (TextBox) -->
                                         <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.SmbPassword, UpdateSourceTrigger=PropertyChanged}"
-                                                 Padding="20,0,50,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0">
+                                                 FontSize="15">
                                             <TextBox.Style>
-                                                <Style TargetType="TextBox">
+                                                <Style TargetType="TextBox" BasedOn="{StaticResource SubfieldInputStyle}">
                                                     <Setter Property="Visibility" Value="Collapsed"/>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding WorkflowEditorVM.IsPasswordVisible}" Value="True">
@@ -202,22 +201,19 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" Margin="0,0,16,0">
                                 <TextBlock Text="Server address" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
-                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
-                                    <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.FtpServer, UpdateSourceTrigger=PropertyChanged}" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0"/>
-                                </Border>
+                                <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.FtpServer, UpdateSourceTrigger=PropertyChanged}" 
+                                         Style="{StaticResource PremiumTextBoxStyle}" FontSize="15"/>
                             </StackPanel>
                             <StackPanel Grid.Column="1">
                                 <TextBlock Text="Port" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
-                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
-                                    <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.FtpPort, UpdateSourceTrigger=PropertyChanged}" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0"/>
-                                </Border>
+                                <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.FtpPort, UpdateSourceTrigger=PropertyChanged}" 
+                                         Style="{StaticResource PremiumTextBoxStyle}" FontSize="15"/>
                             </StackPanel>
                         </Grid>
 
                         <TextBlock Text="Folder" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,24,0,8"/>
-                        <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
-                            <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.FtpRemoteFolder, UpdateSourceTrigger=PropertyChanged}" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0"/>
-                        </Border>
+                        <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.FtpRemoteFolder, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{StaticResource PremiumTextBoxStyle}" FontSize="15"/>
 
                         <Grid Margin="0,24,0,0">
                             <Grid.ColumnDefinitions>
@@ -226,32 +222,29 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" Margin="0,0,16,0">
                                 <TextBlock Text="Protocol" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
-                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
-                                    <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.FtpProtocol}" SelectedValuePath="Content" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0">
-                                        <ComboBoxItem Content="FTP"/>
-                                        <ComboBoxItem Content="SFTP"/>
-                                    </ComboBox>
-                                </Border>
+                                <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.FtpProtocol}" SelectedValuePath="Content"
+                                          Style="{StaticResource PremiumComboBoxStyle}">
+                                    <ComboBoxItem Content="FTP"/>
+                                    <ComboBoxItem Content="SFTP"/>
+                                </ComboBox>
                             </StackPanel>
                             <StackPanel Grid.Column="1">
                                 <TextBlock Text="Encryption" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
-                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
-                                    <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.FtpEncryption}" SelectedValuePath="Content" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0">
-                                        <ComboBoxItem Content="None"/>
-                                        <ComboBoxItem Content="SSL/TLS"/>
-                                        <ComboBoxItem Content="Implicit"/>
-                                    </ComboBox>
-                                </Border>
+                                <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.FtpEncryption}" SelectedValuePath="Content"
+                                          Style="{StaticResource PremiumComboBoxStyle}">
+                                    <ComboBoxItem Content="None"/>
+                                    <ComboBoxItem Content="SSL/TLS"/>
+                                    <ComboBoxItem Content="Implicit"/>
+                                </ComboBox>
                             </StackPanel>
                         </Grid>
 
                         <TextBlock Text="Authentication Type" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,24,0,8"/>
-                        <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
-                            <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.FtpAuthType}" SelectedValuePath="Content" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0">
-                                <ComboBoxItem Content="Normal"/>
-                                <ComboBoxItem Content="Anonymous"/>
-                            </ComboBox>
-                        </Border>
+                        <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.FtpAuthType}" SelectedValuePath="Content"
+                                  Style="{StaticResource PremiumComboBoxStyle}">
+                            <ComboBoxItem Content="Normal"/>
+                            <ComboBoxItem Content="Anonymous"/>
+                        </ComboBox>
 
                         <Grid Margin="0,24,0,0">
                             <Grid.ColumnDefinitions>
@@ -260,20 +253,19 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" Margin="0,0,16,0">
                                 <TextBlock Text="Login" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
-                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
-                                    <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.FtpLogin, UpdateSourceTrigger=PropertyChanged}" Padding="20,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0"/>
-                                </Border>
+                                <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.FtpLogin, UpdateSourceTrigger=PropertyChanged}" 
+                                         Style="{StaticResource PremiumTextBoxStyle}" FontSize="15"/>
                             </StackPanel>
                             <StackPanel Grid.Column="1">
                                 <TextBlock Text="Password" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
-                                <Border Background="{DynamicResource Brush_Elevation_Card}" CornerRadius="12" MinHeight="64" Effect="{StaticResource StandardShadow}">
+                                <Border Style="{StaticResource FieldBorderStyle}">
                                     <Grid>
                                         <!-- Hidden Password (PasswordBox) -->
                                         <PasswordBox local:PasswordBoxHelper.Attach="True" 
                                                      local:PasswordBoxHelper.Password="{Binding WorkflowEditorVM.EditingWorkflow.FtpPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                     Padding="20,0,50,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0">
+                                                     FontSize="15">
                                             <PasswordBox.Style>
-                                                <Style TargetType="PasswordBox">
+                                                <Style TargetType="PasswordBox" BasedOn="{StaticResource SubfieldInputStyle}">
                                                     <Setter Property="Visibility" Value="Visible"/>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding WorkflowEditorVM.IsPasswordVisible}" Value="True">
@@ -285,9 +277,9 @@
                                         </PasswordBox>
                                         <!-- Shown Password (TextBox) -->
                                         <TextBox Text="{Binding WorkflowEditorVM.EditingWorkflow.FtpPassword, UpdateSourceTrigger=PropertyChanged}"
-                                                 Padding="20,0,50,0" VerticalContentAlignment="Center" FontSize="15" Background="Transparent" BorderThickness="0">
+                                                 FontSize="15">
                                             <TextBox.Style>
-                                                <Style TargetType="TextBox">
+                                                <Style TargetType="TextBox" BasedOn="{StaticResource SubfieldInputStyle}">
                                                     <Setter Property="Visibility" Value="Collapsed"/>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding WorkflowEditorVM.IsPasswordVisible}" Value="True">
@@ -322,7 +314,7 @@
                 </StackPanel>
 
                 <!-- ================= RIGHT COLUMN: SCAN CONFIGURATION ================= -->
-                <StackPanel Grid.Column="1">
+                <StackPanel Grid.Column="1" ClipToBounds="False">
                     <!-- File Format -->
                     <TextBlock Text="File Format" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,0,0,8"/>
                     <UniformGrid Columns="2" Margin="-4,0,-4,0">
@@ -395,7 +387,8 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Margin="0,0,16,0">
                             <TextBlock Text="Paper Size" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,24,0,8"/>
-                            <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.PaperSize}" SelectedValuePath="Content" Padding="16,12" FontSize="15" FontWeight="SemiBold">
+                            <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.PaperSize}" SelectedValuePath="Content" 
+                                      FontWeight="SemiBold" Style="{StaticResource PremiumComboBoxStyle}">
                                 <ComboBoxItem Content="Auto"/>
                                 <ComboBoxItem Content="A3"/>
                                 <ComboBoxItem Content="A4"/>
@@ -406,7 +399,8 @@
                         </StackPanel>
                         <StackPanel Grid.Column="1">
                             <TextBlock Text="Resolution" Foreground="{DynamicResource Brush_Text_Secondary}" FontSize="13" Margin="4,24,0,8"/>
-                            <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.Resolution}" SelectedValuePath="Content" Padding="16,12" FontSize="15" FontWeight="SemiBold">
+                            <ComboBox SelectedValue="{Binding WorkflowEditorVM.EditingWorkflow.Resolution}" SelectedValuePath="Content" 
+                                      FontWeight="SemiBold" Style="{StaticResource PremiumComboBoxStyle}">
                                 <ComboBoxItem Content="200dpi"/>
                                 <ComboBoxItem Content="300dpi"/>
                                 <ComboBoxItem Content="600dpi"/>

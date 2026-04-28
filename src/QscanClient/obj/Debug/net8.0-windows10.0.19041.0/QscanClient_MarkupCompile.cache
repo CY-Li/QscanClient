@@ -12,9 +12,9 @@ TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS10_0_19041_0;NET5_0_OR_GREATER;
 c:\Users\Jimmy\QscanClient\src\QscanClient\App.xaml
 101626292987
 22-169199164
-201530512835
+22297847918
 2041795300370
 DocCard.xaml;MainWindow.xaml;Themes\ControlStyles.xaml;Themes\DarkTheme.xaml;Themes\LightTheme.xaml;Views\DetailView.xaml;Views\HomeView.xaml;Views\SettingsView.xaml;Views\WorkflowEditorView.xaml;Views\WorkflowView.xaml;
 
-True
+False
 

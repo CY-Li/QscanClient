@@ -57,7 +57,8 @@ public partial class WorkflowEditorViewModel : ObservableObject
             Name = "New Workflow",
             DestinationType = type.ToString(),
             IsNASDestination = type != WorkflowDestinationType.LocalPC,
-            NamingFormat = "{YYYY}{MM}{DD}_Scan"
+            NamingFormat = "{YYYY}{MM}{DD}_Scan",
+            Sides = "1 Sided"
         };
     }
 

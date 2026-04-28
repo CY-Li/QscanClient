@@ -81,7 +81,7 @@ public partial class Workflow : ObservableObject
     private string _resolution = "300dpi"; // 600dpi, 300dpi, 200dpi
 
     [ObservableProperty]
-    private string _sides = "One sided"; // One sided, Two sided
+    private string _sides = "1 Sided"; // 1 Sided, 2 Sided
 
     public string DisplaySummary => $"{FileFormat} {(EnableOCR ? "+ OCR" : "")} {(EnableAISmartNaming ? "+ AI" : "")}";
 

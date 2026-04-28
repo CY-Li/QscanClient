@@ -16,6 +16,12 @@ public enum Q30ConnectionStatus
     WaitingForUpload
 }
 
+public enum SettingsCategory
+{
+    General,
+    ScanSettings
+}
+
 public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty]
@@ -46,10 +52,28 @@ public partial class MainViewModel : ObservableObject
     private bool _isDarkTheme = false;
 
     [ObservableProperty]
-    private int _totalPagesToday;
+    private int _totalBatchesToday;
 
     [ObservableProperty]
-    private int _totalBatchesToday;
+    private bool _autoCrop = true;
+
+    [ObservableProperty]
+    private bool _autoDeskew = true;
+
+    [ObservableProperty]
+    private bool _removeBlankPage = false;
+
+    [ObservableProperty]
+    private string _appVersion = "1.0.0";
+
+    [ObservableProperty]
+    private string _clientName = System.Environment.MachineName;
+
+    [ObservableProperty]
+    private SettingsCategory _selectedSettingsCategory = SettingsCategory.General;
+
+    [ObservableProperty]
+    private string _quickScanFolder = @"C:\Users\Public\Documents\QscanClient";
 
     partial void OnIsDarkThemeChanged(bool value)
     {
@@ -79,11 +103,15 @@ public partial class MainViewModel : ObservableObject
         WorkflowVM = new WorkflowViewModel(this);
         WorkflowEditorVM = new WorkflowEditorViewModel(this);
 
+        // Get version from assembly
+        var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        if (version != null)
+        {
+            AppVersion = $"{version.Major}.{version.Minor}.{version.Build}";
+        }
 
         // Mock initial data
         LoadMockData();
-
-
     }
 
     public void Initialize()
@@ -134,8 +162,7 @@ public partial class MainViewModel : ObservableObject
         {
             var date = now.AddDays(-i).AddHours(-r.Next(0, 12));
             
-            // If we have specific images, use their count to simulate a real document batch
-            int imageCount = imageFiles.Count > 0 ? imageFiles.Count : r.Next(3, 10);
+            int imageCount = imageFiles.Count > 0 ? imageFiles.Count : 3;
             
             var batch = new ScanBatch 
             { 
@@ -148,12 +175,17 @@ public partial class MainViewModel : ObservableObject
             {
                 if (imageFiles.Count > 0)
                 {
-                    // Use the sorted images in order
                     batch.ImagePaths.Add(imageFiles[j % imageFiles.Count]);
                 }
                 else
                 {
-                    batch.ImagePaths.Add($"mock_image_{j}.jpg");
+                    // Ensure the mock file actually exists on disk so MAPI can find it
+                    string mockPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"mock_page_{j}.jpg");
+                    if (!System.IO.File.Exists(mockPath))
+                    {
+                        System.IO.File.WriteAllBytes(mockPath, new byte[1024]);
+                    }
+                    batch.ImagePaths.Add(mockPath);
                 }
             }
 
@@ -201,6 +233,24 @@ public partial class MainViewModel : ObservableObject
                 ImageCount = CurrentScanningPage,
                 IsNew = true // Trigger highlight
             };
+
+            // Populate ImagePaths so Mail functionality has files to attach
+            string scanDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SimulatedScans");
+            if (!System.IO.Directory.Exists(scanDir))
+                System.IO.Directory.CreateDirectory(scanDir);
+
+            var random = new Random();
+            for (int i = 1; i <= CurrentScanningPage; i++)
+            {
+                // Simulate a mix of PDFs and Images to demonstrate support for both
+                string ext = random.Next(0, 2) == 0 ? ".pdf" : ".jpg";
+                string filePath = System.IO.Path.Combine(scanDir, $"page_{i}{ext}");
+                
+                if (!System.IO.File.Exists(filePath))
+                    System.IO.File.WriteAllBytes(filePath, new byte[2048]);
+                
+                newBatch.ImagePaths.Add(filePath);
+            }
             
             Batches.Insert(0, newBatch); // Add to top of list
             SelectedBatch = newBatch; // Auto-select? Maybe just highlight.
@@ -247,9 +297,103 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
+    [ObservableProperty]
+    private bool _isProcessingEmail;
+
+    [RelayCommand]
+    public async Task MailBatch()
+    {
+        if (SelectedBatch == null) return;
+        try
+        {
+            var filePaths = SelectedBatch.ImagePaths.Where(p => System.IO.File.Exists(p)).ToList();
+            if (filePaths.Count == 0)
+            {
+                MessageBox.Show("目前找不到任何可附加的檔案。", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            IsProcessingEmail = true;
+
+            // EmailService handles both Outlook (via COM) and other clients (via MAPI/EML).
+            // It automatically supports any file type including PDFs and ZIPs them.
+            await QscanClient.Services.EmailService.SendMail(SelectedBatch.Title, filePaths);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+            // Fallback to mailto if generation fails completely
+            try
+            {
+                var subject = Uri.EscapeDataString(SelectedBatch.Title);
+                var psi = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = $"mailto:?subject={subject}",
+                    UseShellExecute = true
+                };
+                System.Diagnostics.Process.Start(psi);
+            }
+            catch
+            {
+                MessageBox.Show("無法開啟郵件客戶端，請確認系統已設定預設郵件程式。",
+                                "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+        finally
+        {
+            IsProcessingEmail = false;
+        }
+    }
+
+    [RelayCommand]
+    public void PrintBatch()
+    {
+        if (SelectedBatch == null || SelectedBatch.ImagePaths.Count == 0) return;
+
+        var dlg = new System.Windows.Controls.PrintDialog();
+        if (dlg.ShowDialog() != true) return;
+
+        var doc = new System.Windows.Documents.FixedDocument();
+        doc.DocumentPaginator.PageSize = new System.Windows.Size(dlg.PrintableAreaWidth, dlg.PrintableAreaHeight);
+
+        foreach (var path in SelectedBatch.ImagePaths)
+        {
+            var pageContent = new System.Windows.Documents.PageContent();
+            var fixedPage = new System.Windows.Documents.FixedPage
+            {
+                Width = dlg.PrintableAreaWidth,
+                Height = dlg.PrintableAreaHeight
+            };
+
+            var img = new System.Windows.Controls.Image
+            {
+                Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(path, UriKind.Absolute)),
+                Width = dlg.PrintableAreaWidth,
+                Height = dlg.PrintableAreaHeight,
+                Stretch = System.Windows.Media.Stretch.Uniform
+            };
+
+            fixedPage.Children.Add(img);
+            ((System.Windows.Markup.IAddChild)pageContent).AddChild(fixedPage);
+            doc.Pages.Add(pageContent);
+        }
+
+        dlg.PrintDocument(doc.DocumentPaginator, SelectedBatch.Title);
+    }
+
     [RelayCommand]
     public void Navigate(string destination)
     {
+        // Reset editing state when leaving Detail view
+        if (destination != "Detail" && SelectedBatch != null)
+            SelectedBatch.IsEditingTitle = false;
+
+        // Default to General tab when entering Settings
+        if (destination == "Settings")
+        {
+            SelectedSettingsCategory = SettingsCategory.General;
+        }
+
         CurrentView = destination switch
         {
             "Home" => _homeView,
@@ -259,7 +403,6 @@ public partial class MainViewModel : ObservableObject
             "WorkflowEditor" => _workflowEditorView,
 
             _ => (object?)_homeView
-
         };
     }
 
@@ -315,5 +458,20 @@ public partial class MainViewModel : ObservableObject
             Q30ConnectionStatus.WaitingForUpload => "Plustek Q30 Connected",
             _ => "Unknown Status"
         };
+    }
+
+    [RelayCommand]
+    private void BrowseQuickScanFolder()
+    {
+        var dialog = new Microsoft.Win32.OpenFolderDialog
+        {
+            Title = "Select Quick Scan Folder",
+            InitialDirectory = QuickScanFolder
+        };
+
+        if (dialog.ShowDialog() == true)
+        {
+            QuickScanFolder = dialog.FolderName;
+        }
     }
 }

@@ -54,7 +54,7 @@
 
         <!-- Header -->
         <Grid Grid.Row="0" Margin="0,0,0,32">
-            <TextBlock Text="Workflow" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource Brush_Text_Primary}" VerticalAlignment="Center"/>
+            <TextBlock Text="Workflow" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource Brush_Text_Primary}" VerticalAlignment="Top"/>
             <Button Command="{Binding WorkflowVM.AddWorkflowCommand}" HorizontalAlignment="Right" VerticalAlignment="Center"
                     Style="{StaticResource HeaderPrimaryActionButtonStyle}" ToolTip="Create new workflow">
                 <Path Data="{StaticResource Icon_Add}" Fill="White" Width="20" Height="20" Stretch="Uniform"/>
@@ -211,10 +211,22 @@
                 </Grid.Style>
 
                 <!-- Guidance Arrow (Top Right) -->
-                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,80,0" Opacity="0.6">
-                    <Path Data="M 0,40 Q 20,40 40,0 M 40,0 L 30,10 M 40,0 L 45,15" Stroke="{DynamicResource Brush_Accent}" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Width="80" Height="80" Stretch="Uniform" Margin="0,0,0,10"/>
-                    <TextBlock Text="Get Started" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Brush_Accent}" HorizontalAlignment="Center"/>
+                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,45,0" Opacity="0.8">
+
+                    <Path Data="M 10,80 Q 30,80 70,10 M 70,10 L 55,22 M 70,10 L 72,28" 
+                          Stroke="{DynamicResource Brush_Accent}" StrokeThickness="3" 
+                          StrokeStartLineCap="Round" StrokeEndLineCap="Round" 
+                          Width="80" Height="80" Stretch="Uniform" Margin="0,0,20,5"/>
+                    <TextBlock Text="Get Started" FontFamily="Ink Free" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource Brush_Accent}" HorizontalAlignment="Center">
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <RotateTransform Angle="-5"/>
+                                <TranslateTransform X="-5"/>
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
                 </StackPanel>
+
 
                 <!-- Center Message -->
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,40">

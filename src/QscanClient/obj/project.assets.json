@@ -380,11 +380,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Jimmy\\QscanClient\\src\\QscanClient\\QscanClient.csproj",
+      "projectUniqueName": "c:\\Users\\Jimmy\\QscanClient\\src\\QscanClient\\QscanClient.csproj",
       "projectName": "QscanClient",
-      "projectPath": "C:\\Users\\Jimmy\\QscanClient\\src\\QscanClient\\QscanClient.csproj",
+      "projectPath": "c:\\Users\\Jimmy\\QscanClient\\src\\QscanClient\\QscanClient.csproj",
       "packagesPath": "C:\\Users\\Jimmy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Jimmy\\QscanClient\\src\\QscanClient\\obj\\",
+      "outputPath": "c:\\Users\\Jimmy\\QscanClient\\src\\QscanClient\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Jimmy\\AppData\\Roaming\\NuGet\\NuGet.Config"
